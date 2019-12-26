@@ -52,7 +52,7 @@ void Simulation::SetPolyModeFill() const {
 void Simulation::TogglePolyMode() {
 
 	//switches between modes on call of the function
-	true == m_bPolyModeToggle ? SetPolyModeFill() : SetPolyModeWireframe();
+	TRUE == m_bPolyModeToggle ? SetPolyModeFill() : SetPolyModeWireframe();
 
 }
 

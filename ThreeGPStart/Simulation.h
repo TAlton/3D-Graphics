@@ -7,6 +7,7 @@ class Renderer;
 struct GLFWwindow;
 
 // Simulation class to handle input, updating of the simulation and calling the renderer
+
 class Simulation
 {
 private:
@@ -21,7 +22,7 @@ private:
 	float m_lastTime{ 0 };
 
 	//bool for remembering which polygon mode is in use
-	bool m_bPolyModeToggle{ false };
+	GLboolean m_bPolyModeToggle{ false };
 
 	// Handle any user input. Return false if program should close.
 	bool HandleInput(GLFWwindow* window);
@@ -30,7 +31,6 @@ private:
 	void SetPolyModeWireframe() const;
 	//set as GL_FILL
 	void SetPolyModeFill() const;
-
 	//Switches between GL_LINE and GL_FILL
 	void TogglePolyMode();
 

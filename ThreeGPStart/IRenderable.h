@@ -1,4 +1,10 @@
 #pragma once
+
+#include "ExternalLibraryHeaders.h"
+
+#include "Helper.h"
+#include "ImageLoader.h"
+
 class IRenderable
 {
 public:
@@ -6,7 +12,7 @@ public:
 	IRenderable();
 	~IRenderable();
 
-private:
+protected:
 
 	std::string m_strFilename{ "" },
 		m_strImageFilename{ "" };
@@ -23,7 +29,7 @@ private:
 	std::vector<glm::vec2> m_vecv2UV;
 	std::vector<GLuint> m_vecunIndices;
 
-	virtual void Initialise() = 0;
+	virtual GLboolean Initialise() = 0;
 
 };
 

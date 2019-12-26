@@ -3,6 +3,7 @@
 #include "ExternalLibraryHeaders.h"
 
 #include "Helper.h"
+#include "ImageLoader.h"
 #include "Mesh.h"
 #include "Camera.h"
 #include "Terrain.h"
@@ -27,11 +28,9 @@ private:
 		m_m4ViewTransform{ 0 },
 		m_m4CombinedTransform{ 0 };
 
-	std::map<std::string, GLuint> m_mapUniformLocation;
-
 	bool CreateProgram();
 	//clears the screen to a colour
-	bool ClearScreen() const;
+	GLboolean ClearScreen() const;
 	//computes the viewport size for use in projection matricies
 	void ComputeViewport();
 	//Computes the projection matrix;

@@ -44,7 +44,7 @@ bool Renderer::CreateProgram()
 	return !Helpers::CheckForGLError();
 }
 
-bool Renderer::ClearScreen() const {
+GLboolean Renderer::ClearScreen() const {
 
 	// Clear buffers from previous frame
 	glClearColor(0.0f, 0.0f, 0.0f, 0.f);
