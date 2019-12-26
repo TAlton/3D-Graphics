@@ -25,8 +25,64 @@ Terrain::~Terrain()
 {
 }
 
-void Terrain::Initialise() {
+GLboolean Terrain::SetNormals() {
 
+	for (auto& x : m_vecunElements) m_vecnNormals.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
 
+	return TRUE;
+
+}
+
+GLboolean Terrain::SetPositions() {
+
+	for (int z{ 0 }; z < m_unNumVertsZ; z++) {
+
+		for (int x{ 0 }; x < m_unNumVertsX; x++) {
+
+			m_vecv3Positions.push_back(glm::vec3(x, 0, -z));
+
+		}
+
+	}
+
+	return TRUE;
+
+}
+
+GLboolean Terrain::SetUV() {
+
+	const GLfloat cfStepX = (1.0f / (m_unNumCellsX - 1)),
+		cfStepZ = (1.0f / (m_unNumCellsZ - 1));
+
+	for (int z{ 0 }; z < m_unNumCellsZ; z++) {
+
+		for (int x{ 0 }; x < m_unNumCellsX; x++) {
+
+			m_vecv2UV.push_back(glm::vec2(x * cfStepX, z * cfStepZ));
+
+		}
+
+	}
+
+}
+
+GLboolean Terrain::Initialise() {
+
+	/*
+	
+	create mesh
+	set num elements
+	set normals
+	set positions
+	apply heightmap
+	smooth normals
+	set buffers
+	bind vao
+	set buffer pointers
+
+	*/
+	SetNormals();
+	SetPositions();
+	SetUV();
 
 }

@@ -21,7 +21,11 @@ private:
 
 	Helpers::ModelLoader m_mlModel;
 
+	void Translate(glm::vec3 xform);
+	void Translate(GLint x = 0, GLint y = 0, GLint z = 0);
+
 	GLboolean Initialise() override final;
+	GLboolean SetVectors();
 
 };
 

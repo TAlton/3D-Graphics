@@ -29,6 +29,10 @@ private:
 	Helpers::ImageLoader m_ilImage,
 		m_ilHeightmap;
 
+	GLboolean SetNormals();
+	GLboolean SetPositions();
+	GLboolean SetUV();
+
 	GLboolean Initialise() override final;
 
 };
