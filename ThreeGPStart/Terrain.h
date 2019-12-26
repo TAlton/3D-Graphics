@@ -8,5 +8,9 @@ class Terrain :
 public:
 	Terrain();
 	~Terrain();
+
+private:
+
+	bool CreateTerrain();
 };
 

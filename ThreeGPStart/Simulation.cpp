@@ -31,8 +31,29 @@ bool Simulation::HandleInput(GLFWwindow* window)
 	// glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	// To reenable it use GLFW_CURSOR_NORMAL
 
+	if (GLFW_PRESS == glfwGetMouseButton(window, GLFW_KEY_F1)) TogglePolyMode();
+
 	// To see an example of input using GLFW see the camera.cpp file.
 	return true;
+}
+
+void Simulation::SetPolyModeWireframe() const {
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	
+}
+
+void Simulation::SetPolyModeFill() const {
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+}
+
+void Simulation::TogglePolyMode() {
+
+	//switches between modes on call of the function
+	true == m_bPolyModeToggle ? SetPolyModeFill() : SetPolyModeWireframe();
+
 }
 
 // Update the simulation (and render) returns false if program should close

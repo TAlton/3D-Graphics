@@ -5,6 +5,8 @@
 #include "Helper.h"
 #include "Mesh.h"
 #include "Camera.h"
+#include "Terrain.h"
+#include "Model.h"
 
 class Renderer
 {
@@ -19,6 +21,8 @@ private:
 	GLuint m_numElements{ 0 };
 
 	bool CreateProgram();
+
+
 public:
 	Renderer()=default;
 	~Renderer();
