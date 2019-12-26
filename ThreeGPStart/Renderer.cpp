@@ -62,7 +62,7 @@ void Renderer::ComputeViewport() {
 	
 }
 
-void Renderer::ComputeProjectionTransform(GLfloat fov = 45.0f, GLfloat near = 1.0f, GLfloat far = 2000.0f) {
+void Renderer::ComputeProjectionTransform(GLfloat fov, GLfloat near, GLfloat far) {
 
 	
 	m_m4ProjectionTransform = (glm::mat4(
@@ -114,12 +114,8 @@ void Renderer::Render(const Helpers::Camera& camera, float deltaTime)
 	//Use oour program. Doing this enables the shaders we attached
 	glUseProgram(m_program);
 
-
-	
-	// TODO: Send the combined matrix to the shader in a uniform
-
-	// TODO: render each mesh. Send the correct model matrix to the shader in a uniform
-
+	GLuint combined_xform_id = glGetUniformLocation(m_program, "combined_xform"); //need a way to put this in a function
+	glUniformMatrix4fv(combined_xform_id, 1, GL_FALSE, glm::value_ptr(m_m4CombinedTransform));
 
 	// Always a good idea, when debugging at least, to check for GL errors
 	Helpers::CheckForGLError();

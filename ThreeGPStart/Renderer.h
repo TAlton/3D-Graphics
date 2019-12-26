@@ -11,6 +11,7 @@
 class Renderer
 {
 private:
+
 	// Program object - to host shaders
 	GLuint m_program{ 0 };
 
@@ -26,7 +27,7 @@ private:
 		m_m4ViewTransform{ 0 },
 		m_m4CombinedTransform{ 0 };
 
-	std::vector<GLint>
+	std::map<std::string, GLuint> m_mapUniformLocation;
 
 	bool CreateProgram();
 	//clears the screen to a colour
@@ -37,8 +38,8 @@ private:
 	void ComputeProjectionTransform(GLfloat fov = 45.0f, GLfloat near = 1.0f, GLfloat far = 2000.0f);
 	//calculates the view transform and the combined transform from the cameras position and where it is looking
 	void UpdateViewTransform(glm::vec3 pos, glm::vec3 look, glm::vec3 up);
+	//creates information for all uniform variables
 
-	void GenerateUniformLocations();
 
 public:
 
