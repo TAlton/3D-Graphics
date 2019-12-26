@@ -14,6 +14,9 @@ bool Renderer::CreateProgram()
 	// Create a new program (returns a unqiue id)
 	m_program = glCreateProgram();
 
+	ComputeViewport();
+	ComputeProjectionTransform();
+
 	// Load and create vertex and fragment shaders
 	GLuint vertex_shader{ Helpers::LoadAndCompileShader(GL_VERTEX_SHADER, "Data/Shaders/vertex_shader.glsl") };
 	GLuint fragment_shader{ Helpers::LoadAndCompileShader(GL_FRAGMENT_SHADER, "Data/Shaders/fragment_shader.glsl") };
@@ -41,6 +44,45 @@ bool Renderer::CreateProgram()
 	return !Helpers::CheckForGLError();
 }
 
+bool Renderer::ClearScreen() const {
+
+	// Clear buffers from previous frame
+	glClearColor(0.0f, 0.0f, 0.0f, 0.f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	return true;
+	
+}
+
+void Renderer::ComputeViewport() {
+
+	GLint viewportSize[4];
+	glGetIntegerv(GL_VIEWPORT, viewportSize);
+	m_fAspectRatio = viewportSize[2] / (GLfloat)viewportSize[3];
+	
+}
+
+void Renderer::ComputeProjectionTransform(GLfloat fov = 45.0f, GLfloat near = 1.0f, GLfloat far = 2000.0f) {
+
+	
+	m_m4ProjectionTransform = (glm::mat4(
+								glm::perspective(
+									glm::radians(fov),
+									m_fAspectRatio,
+									near,
+									far)));
+
+}
+
+void Renderer::UpdateViewTransform(glm::vec3 pos, glm::vec3 look, glm::vec3 up) {
+
+	//calculates the view xform from the cameras properties
+	m_m4ViewTransform = glm::lookAt(pos, pos + look, up);
+	//calculates the combined transform also reducing amount of functions
+	m_m4CombinedTransform = m_m4ProjectionTransform * m_m4ViewTransform;
+
+}
+
 // Load / create geometry into OpenGL buffers	
 bool Renderer::InitialiseGeometry()
 {
@@ -66,17 +108,13 @@ void Renderer::Render(const Helpers::Camera& camera, float deltaTime)
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 
-	// Uncomment to render in wireframe (can be useful when debugging)
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	ClearScreen();
+	UpdateViewTransform(camera.GetPosition(), camera.GetLookVector(), camera.GetUpVector());
 
-	// Clear buffers from previous frame
-	glClearColor(0.0f, 0.0f, 0.0f, 0.f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//Use oour program. Doing this enables the shaders we attached
+	glUseProgram(m_program);
 
-	// TODO: Compute viewport and projection matrix
-	
 
-	// TODO: Compute camera view matrix and combine with projection matrix for passing to shader
 	
 	// TODO: Send the combined matrix to the shader in a uniform
 
