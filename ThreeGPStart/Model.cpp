@@ -10,13 +10,30 @@ Model::Model(const std::string& ModelFilename, const std::string& TextureFilenam
 	this->m_v3RotationAxis = Axis;
 	this->m_fDegrees = Degrees;
 
+	try {
+
+		m_mlModel.LoadFromFile(m_strFilename);
+
+	}
+	catch (std::runtime_error& e) {
+
+		throw e;
+
+	}
+	catch (std::invalid_argument& e) {
+
+		std::cerr << e.what() << std::endl;
+		throw e;
+
+	}
+
 }
 
 Model::~Model()
 {
 }
 
-void Model::Initialise() {
+GLboolean Model::Initialise() {
 
 
 

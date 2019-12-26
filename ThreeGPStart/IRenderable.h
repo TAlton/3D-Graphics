@@ -4,6 +4,7 @@
 
 #include "Helper.h"
 #include "ImageLoader.h"
+#include "Mesh.h"
 
 class IRenderable
 {
@@ -30,6 +31,9 @@ protected:
 	std::vector<GLuint> m_vecunIndices;
 
 	virtual GLboolean Initialise() = 0;
+	virtual void Translate(glm::vec3 xform);
+
+
 
 };
 

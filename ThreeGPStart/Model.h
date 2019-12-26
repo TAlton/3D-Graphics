@@ -1,5 +1,6 @@
 #pragma once
 #include "IRenderable.h"
+
 class Model :
 	public IRenderable {
 
@@ -17,6 +18,8 @@ private:
 		m_v3RotationAxis{ 0.0f, 0.0f, 0.0f };
 
 	GLfloat m_fDegrees{ 0.0f };
+
+	Helpers::ModelLoader m_mlModel;
 
 	GLboolean Initialise() override final;
 
