@@ -6,7 +6,7 @@ class Model :
 
 public:
 
-	Model(const std::string ModelFilename, GLuint& VAO, GLint ParentIndex = -1, glm::vec3 Translation = glm::vec3(0.0f), glm::vec3 Axis = glm::vec3(0.0f), GLfloat Degrees = 0.0f);
+	Model(const std::string& ModelFilename, GLuint VAO, GLint ParentIndex, glm::vec3 Translation = { 0, 0, 0 }, glm::vec3 Axis = { 0, 0, 0 }, GLfloat Degrees = 0.0f);
 	~Model();
 
 private:

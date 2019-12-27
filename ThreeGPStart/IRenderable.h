@@ -10,8 +10,7 @@ class IRenderable
 {
 public:
 
-	IRenderable();
-	~IRenderable();
+	IRenderable(const std::string& Filename) : m_strFilename(Filename) {}
 
 	glm::vec3 GetTransform() const { return m_v3CombinedTransform; }
 	GLsizei GetNumElements() const { return m_stNumElements; }
@@ -19,8 +18,8 @@ public:
 
 protected:
 
-	std::string m_strFilename{ "" },
-		m_strImageFilename{ "" };
+	std::string m_strFilename{ '\0' },
+		m_strImageFilename{ '\0' };
 
 	GLuint m_unNormalsVBO{ 0 },
 		m_unVerticesVBO{ 0 },

@@ -1,16 +1,5 @@
 #include "IRenderable.h"
 
-
-
-IRenderable::IRenderable()
-{
-}
-
-
-IRenderable::~IRenderable()
-{
-}
-
 GLboolean IRenderable::SetBuffers() {
 
 	glGenBuffers(1, &m_unVerticesVBO);
@@ -80,7 +69,7 @@ GLboolean IRenderable::SetBufferPointers() {
 		);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_unElementsEBO);
-	!Helpers::CheckForGLError();
+	Helpers::CheckForGLError();
 
 	glBindVertexArray(0);
 

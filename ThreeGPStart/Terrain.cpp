@@ -1,6 +1,6 @@
 #include "Terrain.h"
 
-Terrain::Terrain(const std::string& ModelFilename, const std::string& HeightmapFilename, GLuint& VAO, GLint x, GLint y) {
+Terrain::Terrain(const std::string& ModelFilename, const std::string& HeightmapFilename, GLuint VAO, GLint x, GLint y) : IRenderable(ModelFilename) {
 
 	m_ilImage.Load(ModelFilename);
 	m_ilHeightmap.Load(HeightmapFilename);

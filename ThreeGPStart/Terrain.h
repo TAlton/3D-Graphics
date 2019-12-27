@@ -7,7 +7,7 @@ class Terrain :
 
 public:
 
-	Terrain(const std::string& ModelFilename, const std::string& HeightmapFilename, GLuint& VAO, GLint x = 0, GLint y = 0);
+	Terrain(const std::string& ModelFilename, const std::string& HeightmapFilename, GLuint VAO, GLint x = 0, GLint y = 0);
 	~Terrain();
 
 private:
