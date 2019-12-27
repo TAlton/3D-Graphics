@@ -21,6 +21,8 @@ Model::Model(const std::string ModelFilename, GLuint& VAO, GLint ParentIndex, gl
 
 	}
 
+	Initialise();
+
 }
 
 Model::~Model()

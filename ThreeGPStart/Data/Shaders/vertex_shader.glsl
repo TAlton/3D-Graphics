@@ -8,9 +8,9 @@ layout(location = 0) in vec3 vertex_position;
 layout(location = 1) in vec3 vertex_normal;
 layout(location = 2) in vec2 vertex_uv;
 
-varying out vec3 v_normal;
+out vec3 v_normal;
 
-varying out vec2 TexCoord;
+out vec2 TexCoord;
 
 void main(void)
 {	

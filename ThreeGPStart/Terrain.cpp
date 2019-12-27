@@ -27,7 +27,7 @@ Terrain::~Terrain()
 
 GLboolean Terrain::SetNormals() {
 
-		for (auto& x : m_vecunElements) m_vecnNormals.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
+	for (auto& x : m_vecunElements) m_vecnNormals.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	return TRUE;
 

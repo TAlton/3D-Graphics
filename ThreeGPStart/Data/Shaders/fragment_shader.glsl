@@ -4,9 +4,9 @@
 
 out vec4 fragment_colour;
 
-varying in vec3 v_normal;
+in vec3 v_normal;
 
-varying in vec2 TexCoord;
+in vec2 TexCoord;
 
 void main(void)
 {

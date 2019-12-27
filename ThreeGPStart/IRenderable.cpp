@@ -31,9 +31,7 @@ GLboolean IRenderable::SetBuffers() {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-	if (Helpers::CheckForGLError()) return FALSE;
-
-	return TRUE;
+	return !Helpers::CheckForGLError();
 
 }
 
@@ -42,9 +40,7 @@ GLboolean IRenderable::BindVao() {
 		glGenVertexArrays(1, &m_unVAO);
 		glBindVertexArray(m_unVAO);
 
-	if (Helpers::CheckForGLError()) return FALSE;
-
-	return TRUE;
+		return !Helpers::CheckForGLError();
 
 }
 
@@ -84,10 +80,9 @@ GLboolean IRenderable::SetBufferPointers() {
 		);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_unElementsEBO);
+	!Helpers::CheckForGLError();
 
 	glBindVertexArray(0);
-
-	if (Helpers::CheckForGLError()) return FALSE;
 
 	return TRUE;
 

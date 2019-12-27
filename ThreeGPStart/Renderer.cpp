@@ -14,13 +14,6 @@ bool Renderer::CreateProgram()
 	// Create a new program (returns a unqiue id)
 	m_program = glCreateProgram();
 
-	//calculates view and projection matricies
-	ComputeViewport();
-	ComputeProjectionTransform();
-	//loads all renderables
-	LoadModels();
-	LoadTerrain();
-
 	// Load and create vertex and fragment shaders
 	GLuint vertex_shader{ Helpers::LoadAndCompileShader(GL_VERTEX_SHADER, "Data/Shaders/vertex_shader.glsl") };
 	GLuint fragment_shader{ Helpers::LoadAndCompileShader(GL_FRAGMENT_SHADER, "Data/Shaders/fragment_shader.glsl") };
@@ -44,6 +37,13 @@ bool Renderer::CreateProgram()
 	// Link the shaders, checking for errors
 	if (!Helpers::LinkProgramShaders(m_program))
 		return false;
+
+	//calculates view and projection matricies
+	ComputeViewport();
+	ComputeProjectionTransform();
+	//loads all renderables
+	//LoadModels();
+	LoadTerrain();
 
 	return !Helpers::CheckForGLError();
 }
@@ -146,14 +146,14 @@ void Renderer::Render(const Helpers::Camera& camera, float deltaTime)
 	GLuint combined_xform_id = glGetUniformLocation(m_program, "combined_xform"); //need a way to put this in a function
 	glUniformMatrix4fv(combined_xform_id, 1, GL_FALSE, glm::value_ptr(m_m4CombinedTransform));
 
-	for (auto& x : vecRenderables) { //send off xform for each model
+	//for (auto& x : vecRenderables) { //send off xform for each model
 
-		glm::mat4 model_xform = glm::mat4(1);
-		model_xform = glm::translate(model_xform, x->GetTransform());
-		GLuint model_xform_id = glGetUniformLocation(m_program, "model_xform");
-		glUniformMatrix4fv(model_xform_id, 1, GL_FALSE, glm::value_ptr(model_xform));
+	//	glm::mat4 model_xform = glm::mat4(1);
+	//	model_xform = glm::translate(model_xform, x->GetTransform());
+	//	GLuint model_xform_id = glGetUniformLocation(m_program, "model_xform");
+	//	glUniformMatrix4fv(model_xform_id, 1, GL_FALSE, glm::value_ptr(model_xform));
 
-	}
+	//}
 
 	for (auto& x : vecRenderables) {
 
