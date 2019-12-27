@@ -45,9 +45,7 @@ GLboolean Terrain::SetPositions() {
 
 		}
 
-	if (Helpers::CheckForGLError()) return FALSE;
-
-	return TRUE;
+		return !Helpers::CheckForGLError();
 
 }
 
@@ -66,9 +64,7 @@ GLboolean Terrain::SetUV() {
 
 	}
 
-	if (Helpers::CheckForGLError()) return FALSE;
-
-	return TRUE;
+	return !Helpers::CheckForGLError();
 
 }
 
@@ -175,9 +171,7 @@ GLboolean Terrain::Initialise() {
 	BindVao();
 	SetBufferPointers();
 
-	if (Helpers::CheckForGLError()) return FALSE;
-
-	return TRUE;
+	return !Helpers::CheckForGLError();
 
 }
 
@@ -192,8 +186,6 @@ GLboolean Terrain::SetTextureBuffer() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glGenerateMipmap(GL_TEXTURE_2D);
 
-	if (Helpers::CheckForGLError()) return FALSE;
-
-	return TRUE;
+	return !Helpers::CheckForGLError();
 
 }

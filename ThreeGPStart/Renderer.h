@@ -37,18 +37,10 @@ private:
 	void ComputeProjectionTransform(GLfloat fov = 45.0f, GLfloat near = 1.0f, GLfloat far = 2000.0f);
 	//calculates the view transform and the combined transform from the cameras position and where it is looking
 	void UpdateViewTransform(glm::vec3 pos, glm::vec3 look, glm::vec3 up);
-	//creates information for all uniform variables
+	GLboolean LoadModels();
+	GLboolean LoadTerrain();
 
-	Model m_Hull{ "Data\\Models\\AquaPig\\hull.obj", m_VAO, -1, glm::vec3(0.0f, 0.0f, 0.0f) },
-		m_mWingRight{ "Data\\Models\\AquaPig\\wing_right.obj", m_VAO, 0, glm::vec3(-2.231f, 0.272f, -2.663f) },
-		m_mWingLeft{ "Data\\Models\\AquaPig\\wing_left.obj", m_VAO, 0, glm::vec3(2.231f, 0.272f, -2.663f) },
-		m_mPropeller{ "Data\\Models\\AquaPig\\propeller.obj", m_VAO, 0, glm::vec3(0.0f, 0.272f, -2.663f), 90.f, glm::vec3(1.0f, 0.0f, 0.0f) },
-		m_mGunBase{ "Data\\Models\\AquaPig\\gun_base.obj", m_VAO, 0, glm::vec3(0.0f, 0.569f, -1.866f) },
-		m_mGun{ "Data\\Models\\AquaPig\\gun.obj", m_VAO, 4, glm::vec3(0.0f, 1.506f, 0.644f) };
-
-	Terrain m_tGrass{ "Data\\Textures\\grass11.bmp", "Data\\Textures\\curvy.gif", m_VAO, 2, 2 };
-
-	std::vector<IRenderable*> vecRenderables{ m_tGrass, m_Hull, m_mWingRight, m_mWingLeft, m_mPropeller, m_mGunBase, m_mGun }
+	std::vector<IRenderable*> vecRenderables;
 
 public:
 

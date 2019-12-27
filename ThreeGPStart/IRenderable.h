@@ -13,6 +13,10 @@ public:
 	IRenderable();
 	~IRenderable();
 
+	glm::vec3 GetTransform() const { return m_v3CombinedTransform; }
+	GLsizei GetNumElements() const { return m_stNumElements; }
+	GLuint GetVAO() const { return m_unVAO; }
+
 protected:
 
 	std::string m_strFilename{ "" },
@@ -25,7 +29,11 @@ protected:
 		m_unTexture{ 0 },
 		m_unVAO{ 0 };
 
-	size_t m_stNumElements{ 0 };
+	glm::vec3 m_v3Translation{ 0.0f, 0.0f, 0.0f },
+		m_v3CombinedTransform{ 0.0f, 0.0f, 0.0f },
+		m_v3RotationAxis{ 0.0f, 0.0f, 0.0f };
+
+	GLsizei m_stNumElements{ 0 };
 
 	std::vector<glm::vec3> m_vecv3Positions,
 		m_vecnNormals;

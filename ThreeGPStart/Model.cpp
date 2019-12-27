@@ -1,21 +1,20 @@
 #include "Model.h"
 
-Model::Model(const std::string& ModelFilename, const std::string& TextureFilename, GLuint& VAO, GLint ParentIndex, glm::vec3 Translation, glm::vec3 Axis, GLfloat Degrees) {
+Model::Model(const std::string ModelFilename, GLuint& VAO, GLint ParentIndex, glm::vec3 Translation, glm::vec3 Axis, GLfloat Degrees) {
 
-	this->m_strFilename = ModelFilename;
-	this->m_strImageFilename = TextureFilename;
-	this->m_unVAO = VAO;
-	this->m_unParentID = ParentIndex;
-	this->m_v3Translation = Translation;
-	this->m_v3RotationAxis = Axis;
-	this->m_fDegrees = Degrees;
+	m_strFilename = ModelFilename;
+	m_unVAO = VAO;
+	m_unParentID = ParentIndex;
+	m_v3Translation = Translation;
+	m_v3RotationAxis = Axis;
+	m_fDegrees = Degrees;
 
 	try {
 
 		m_mlModel.LoadFromFile(m_strFilename);
 
 	}
-	catch (std::invalid_argument& e) {
+	catch (std::invalid_argument & e) {
 
 		std::cerr << e.what() << std::endl;
 		throw e;
@@ -57,9 +56,7 @@ GLboolean Model::Initialise() {
 	BindVao();
 	SetBufferPointers();
 
-	if (Helpers::CheckForGLError()) return FALSE;
-
-	return TRUE;
+	return !Helpers::CheckForGLError();
 
 }
 
@@ -83,8 +80,6 @@ GLboolean Model::SetVectors() {
 
 GLboolean Model::LoadMesh() {
 
-	if (!m_mlModel.LoadFromFile(m_strFilename)) return FALSE;
-
-	return TRUE;
+	return m_mlModel.LoadFromFile(m_strFilename);
 
 }

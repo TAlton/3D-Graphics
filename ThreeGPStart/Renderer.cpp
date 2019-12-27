@@ -14,8 +14,12 @@ bool Renderer::CreateProgram()
 	// Create a new program (returns a unqiue id)
 	m_program = glCreateProgram();
 
+	//calculates view and projection matricies
 	ComputeViewport();
 	ComputeProjectionTransform();
+	//loads all renderables
+	LoadModels();
+	LoadTerrain();
 
 	// Load and create vertex and fragment shaders
 	GLuint vertex_shader{ Helpers::LoadAndCompileShader(GL_VERTEX_SHADER, "Data/Shaders/vertex_shader.glsl") };
@@ -83,6 +87,31 @@ void Renderer::UpdateViewTransform(glm::vec3 pos, glm::vec3 look, glm::vec3 up) 
 
 }
 
+GLboolean Renderer::LoadModels() {
+
+	Model m_mHull("Data\\Models\\AquaPig\\hull.obj", m_VAO, -1, glm::vec3(0.0f, 0.0f, 0.0f));
+	Model m_mWingRight("Data\\Models\\AquaPig\\wing_right.obj", m_VAO, 0, glm::vec3(-2.231f, 0.272f, -2.663f));
+	Model m_mWingLeft("Data\\Models\\AquaPig\\wing_left.obj", m_VAO, 0, glm::vec3(2.231f, 0.272f, -2.663f));
+	Model m_mPropeller("Data\\Models\\AquaPig\\propeller.obj", m_VAO, 0, glm::vec3(0.0f, 0.272f, -2.663f), glm::vec3(1.0f, 0.0f, 0.0f), 90.0f);
+	Model m_mGunBase("Data\\Models\\AquaPig\\gun_base.obj", m_VAO, 0, glm::vec3(0.0f, 0.569f, -1.866f));
+	Model m_mGun("Data\\Models\\AquaPig\\gun.obj", m_VAO, 4, glm::vec3(0.0f, 1.506f, 0.644f));
+
+	vecRenderables.insert(vecRenderables.end(), { &m_mHull, &m_mWingRight, &m_mWingLeft, &m_mPropeller, &m_mGunBase, &m_mGun });
+
+	return Helpers::CheckForGLError();
+
+}
+
+GLboolean Renderer::LoadTerrain() {
+
+	Terrain m_tGrass("Data\\Textures\\grass11.bmp", "Data\\Textures\\curvy.gif", m_VAO, 2, 2);
+
+	vecRenderables.push_back(&m_tGrass);
+
+	return Helpers::CheckForGLError();
+
+}
+
 // Load / create geometry into OpenGL buffers	
 bool Renderer::InitialiseGeometry()
 {
@@ -116,6 +145,22 @@ void Renderer::Render(const Helpers::Camera& camera, float deltaTime)
 
 	GLuint combined_xform_id = glGetUniformLocation(m_program, "combined_xform"); //need a way to put this in a function
 	glUniformMatrix4fv(combined_xform_id, 1, GL_FALSE, glm::value_ptr(m_m4CombinedTransform));
+
+	for (auto& x : vecRenderables) { //send off xform for each model
+
+		glm::mat4 model_xform = glm::mat4(1);
+		model_xform = glm::translate(model_xform, x->GetTransform());
+		GLuint model_xform_id = glGetUniformLocation(m_program, "model_xform");
+		glUniformMatrix4fv(model_xform_id, 1, GL_FALSE, glm::value_ptr(model_xform));
+
+	}
+
+	for (auto& x : vecRenderables) {
+
+		glBindVertexArray(x->GetVAO());
+		glDrawElements(GL_TRIANGLES, x->GetNumElements(), GL_UNSIGNED_INT, (void*)0);
+
+	}
 
 	// Always a good idea, when debugging at least, to check for GL errors
 	Helpers::CheckForGLError();
