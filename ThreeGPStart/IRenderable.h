@@ -23,8 +23,9 @@ protected:
 		m_unElementsEBO{ 0 },
 		m_unUVVBO{ 0 },
 		m_unTexture{ 0 },
-		m_unVAO{ 0 },
-		m_unNumElements{ 0 };
+		m_unVAO{ 0 };
+
+	size_t m_stNumElements{ 0 };
 
 	std::vector<glm::vec3> m_vecv3Positions,
 		m_vecnNormals;
@@ -32,9 +33,10 @@ protected:
 	std::vector<GLuint> m_vecunElements;
 
 	virtual GLboolean Initialise() = 0;
-	virtual GLboolean SetBuffers() = 0;
-	virtual GLboolean BindVAO() = 0;
-	virtual GLboolean SetBufferPointers() = 0;
+
+	virtual GLboolean SetBuffers();
+	virtual GLboolean BindVao();
+	virtual GLboolean SetBufferPointers();
 
 };
 

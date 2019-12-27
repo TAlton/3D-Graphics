@@ -15,11 +15,6 @@ Model::Model(const std::string& ModelFilename, const std::string& TextureFilenam
 		m_mlModel.LoadFromFile(m_strFilename);
 
 	}
-	catch (std::runtime_error& e) {
-
-		throw e;
-
-	}
 	catch (std::invalid_argument& e) {
 
 		std::cerr << e.what() << std::endl;
@@ -47,18 +42,24 @@ void Model::Translate(GLint x, GLint y, GLint z) {
 
 }
 
+void Model::SetTransform() {
+
+	this->m_v3CombinedTransform += this->m_v3Translation;
+
+}
+
 GLboolean Model::Initialise() {
 
-	/*
-	
-	load mesh
-	set xfrom
-	set vectors
-	set buffers 
-	bind vao
-	set buffer pointers
+	LoadMesh();
+	SetTransform();
+	SetVectors();
+	SetBuffers();
+	BindVao();
+	SetBufferPointers();
 
-	*/
+	if (Helpers::CheckForGLError()) return FALSE;
+
+	return TRUE;
 
 }
 
@@ -69,12 +70,20 @@ GLboolean Model::SetVectors() {
 	m_vecv2UV = m_mlModel.GetMeshVector()[0].uvCoords;
 	m_vecunElements = m_mlModel.GetMeshVector()[0].elements;
 
-	m_unNumElements = m_vecunElements.size();
+	m_stNumElements = m_vecunElements.size();
 
 	if (0 == m_vecv3Positions.size()) return FALSE;
 	if (0 == m_vecnNormals.size()) return FALSE;
 	if (0 == m_vecv2UV.size()) return FALSE;
 	if (0 == m_vecunElements.size()) return FALSE;
+
+	return TRUE;
+
+}
+
+GLboolean Model::LoadMesh() {
+
+	if (!m_mlModel.LoadFromFile(m_strFilename)) return FALSE;
 
 	return TRUE;
 

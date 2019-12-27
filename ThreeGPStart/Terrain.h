@@ -32,8 +32,12 @@ private:
 	GLboolean SetNormals();
 	GLboolean SetPositions();
 	GLboolean SetUV();
+	void CreateMesh();
+	void ApplyHeightmap();
+	void SmoothNormals();
 
 	GLboolean Initialise() override final;
+	GLboolean SetTextureBuffer();
 
 };
 
