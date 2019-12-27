@@ -165,3 +165,30 @@ void Renderer::Render(const Helpers::Camera& camera, float deltaTime)
 	// Always a good idea, when debugging at least, to check for GL errors
 	Helpers::CheckForGLError();
 }
+
+/*
+
+todo
+
+lights from the tutorial
+----directional
+----ambient
+
+multiple textures
+
+perlin noise
+
+model movement within scene
+
+moving part of a model (propeller for the aqua pig)
+
+headlights (this is just a directional light, that is placed on the model and rotates and moves with it
+
+Interpolation?
+
+skybox?
+
+
+
+
+*/
