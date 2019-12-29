@@ -13,7 +13,7 @@ public:
 	IRenderable(const std::string& Filename) : m_strFilename(Filename) {}
 
 	glm::vec3 GetTransform() const { return m_v3CombinedTransform; }
-	GLsizei GetNumElements() const { return m_stNumElements; }
+	GLuint64EXT GetNumElements() const { return m_stNumElements; }
 	GLuint GetVAO() const { return m_unVAO; }
 
 protected:
@@ -32,7 +32,7 @@ protected:
 		m_v3CombinedTransform{ 0.0f, 0.0f, 0.0f },
 		m_v3RotationAxis{ 0.0f, 0.0f, 0.0f };
 
-	GLsizei m_stNumElements{ 0 };
+	GLuint64EXT m_stNumElements{ 0 };
 
 	std::vector<glm::vec3> m_vecv3Positions,
 		m_vecnNormals;

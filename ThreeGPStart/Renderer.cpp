@@ -104,7 +104,7 @@ GLboolean Renderer::LoadModels() {
 
 GLboolean Renderer::LoadTerrain() {
 
-	Terrain* m_tGrass = new Terrain("Data\\Textures\\grass11.bmp", "Data\\Textures\\curvy.gif", m_VAO, 2, 2 );
+	Terrain* m_tGrass = new Terrain("Data\\Textures\\grass11.bmp", "Data\\Textures\\curvy.gif", m_VAO, 256, 256);
 
 	vecRenderables.push_back(m_tGrass);
 
@@ -146,6 +146,10 @@ void Renderer::Render(const Helpers::Camera& camera, float deltaTime)
 	GLuint combined_xform_id = glGetUniformLocation(m_program, "combined_xform"); //need a way to put this in a function
 	glUniformMatrix4fv(combined_xform_id, 1, GL_FALSE, glm::value_ptr(m_m4CombinedTransform));
 
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, 1);
+	glUniform1i(glGetUniformLocation(m_program, "sampler_tex"), 0);
+
 	for (auto& x : vecRenderables) { //send off xform for each model
 
 		glm::mat4 model_xform = glm::mat4(1);
@@ -158,7 +162,7 @@ void Renderer::Render(const Helpers::Camera& camera, float deltaTime)
 	for (auto& x : vecRenderables) {
 
 		glBindVertexArray(x->GetVAO());
-		glDrawElements(GL_TRIANGLES, x->GetNumElements(), GL_UNSIGNED_INT, (void*)0);
+		glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(x->GetNumElements()), GL_UNSIGNED_INT, (void*)0);
 
 	}
 

@@ -5,8 +5,8 @@ Terrain::Terrain(const std::string& ModelFilename, const std::string& HeightmapF
 	m_ilImage.Load(ModelFilename);
 	m_ilHeightmap.Load(HeightmapFilename);
 
-	m_unNumCellsX = m_ilImage.Width();
-	m_unNumCellsZ = m_ilImage.Height();
+	m_unNumCellsX = x;
+	m_unNumCellsZ = y;
 	
 	m_unNumVertsX = m_unNumCellsX + 1;
 	m_unNumVertsZ = m_unNumCellsZ + 1;
@@ -51,8 +51,8 @@ GLboolean Terrain::SetPositions() {
 
 GLboolean Terrain::SetUV() {
 
-	const GLfloat cfStepX = (1.0f / (m_unNumCellsX - 1)),
-		cfStepZ = (1.0f / (m_unNumCellsZ - 1));
+	const GLfloat cfStepX = (32.0f / (m_unNumCellsX - 1)),
+		cfStepZ = (32.0f / (m_unNumCellsZ - 1));
 
 	for (GLuint z{ 0 }; z < m_unNumCellsZ; z++) {
 
@@ -113,19 +113,21 @@ void Terrain::CreateMesh() {
 void Terrain::ApplyHeightmap() {
 
 	for (GLuint z{ 0 }; z < m_unNumVertsZ; z++) {
+
 		for (GLuint x{ 0 }; x < m_unNumVertsX; x++) {
+
 			GLfloat imageX = m_fVertXToImage * x;
 			GLfloat imageZ = m_fVertZToImage * z;
 
-		
+			GLint64 offset = ((GLint64)imageX + (GLint64)imageZ * m_ilHeightmap.Width()) * 4;		
 
-			GLint64 offset = ((GLint64)imageX + (GLint64)imageZ * m_ilHeightmap.Width()) * 4;
-			
 			GLubyte h = m_pbImageData[offset];
 
-			m_vecv3Positions[m_unCurrentVertex].y = (GLfloat)-h / 2;
+			m_vecv3Positions[m_unCurrentVertex].y = (GLfloat)-h / 4;
 			m_unCurrentVertex++;
+
 		}
+
 	}
 
 }
@@ -141,7 +143,7 @@ void Terrain::SmoothNormals() {
 		glm::vec3 v1 = m_vecv3Positions[i2];
 		glm::vec3 v2 = m_vecv3Positions[i3];
 
-		glm::vec3 normal = glm::cross((v1 - v0), (v2 - v0));
+		glm::vec3 normal = glm::normalize(glm::cross((v2 - v0), (v1 - v0)));
 
 		m_vecnNormals[i1] += normal;
 		m_vecnNormals[i2] += normal;
@@ -149,11 +151,7 @@ void Terrain::SmoothNormals() {
 
 	}
 
-	for (GLint i{ 0 }; i < m_vecnNormals.size(); i++) {
-
-		glm::normalize(m_vecnNormals[i]);
-
-	}
+	for (auto& n : m_vecnNormals) n = glm::normalize(n);
 
 }
 
