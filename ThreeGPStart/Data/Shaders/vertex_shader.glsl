@@ -12,10 +12,10 @@ out vec3 v_normal;
 
 out vec2 TexCoord;
 
-void main(void)
-{	
-	v_normal = vertex_normal;
+void main(void) {	
+
+	v_normal = mat3(model_xform) * vertex_normal;
 	TexCoord = vertex_uv;
-	gl_Position = combined_xform * model_xform * vec4(vertex_position.x, vertex_position.y, vertex_position.z, 1.0);
+	gl_Position = combined_xform * model_xform * vec4(vertex_position, 1.0);
 
 }
