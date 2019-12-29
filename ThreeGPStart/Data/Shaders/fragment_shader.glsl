@@ -19,6 +19,7 @@ void main(void)
 	//fragment_colour = vec4(n, n, n, 1.0f);
 
 	//vec3 tex_colour = texture(sampler_tex, TexCoord).rgb;
+	//tex_colour *= v_normal;
 	//fragment_colour = vec4(tex_colour, 1.0f);
 
 }
