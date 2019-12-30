@@ -37,10 +37,12 @@ private:
 	void ComputeProjectionTransform(GLfloat fov = 45.0f, GLfloat near = 1.0f, GLfloat far = 2000.0f);
 	//calculates the view transform and the combined transform from the cameras position and where it is looking
 	void UpdateViewTransform(glm::vec3 pos, glm::vec3 look, glm::vec3 up);
+	void SetHierarchy();
 	GLboolean LoadModels();
 	GLboolean LoadTerrain();
 
-	std::vector<IRenderable*> vecRenderables;
+	void SetModelTransform(glm::mat4 matrix);
+
 	std::vector<Terrain*> vecTerrain;
 	std::vector<Model*> vecModel;
 
@@ -54,5 +56,6 @@ public:
 
 	// Render the scene
 	void Render(const Helpers::Camera& camera, float deltaTime);
+	void MoveBoat(glm::vec3 v);
 };
 

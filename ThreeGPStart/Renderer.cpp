@@ -87,6 +87,19 @@ void Renderer::UpdateViewTransform(glm::vec3 pos, glm::vec3 look, glm::vec3 up) 
 
 }
 
+void Renderer::SetHierarchy() { //possible not needed
+
+	for (auto& x : vecModel) {
+
+		if (-1 == x->GetParent()) continue;
+
+		x->Translate(vecModel[x->GetParent()]->GetTransform());
+		
+
+	}
+
+}
+
 GLboolean Renderer::LoadModels() {
 
 	Model* m_mHull = new Model("Data\\Models\\AquaPig\\hull.obj", m_VAO, -1, glm::vec3(0.0f, 0.0f, 0.0f));
@@ -98,6 +111,8 @@ GLboolean Renderer::LoadModels() {
 	Model* m_mJeep = new Model("Data\\Models\\Jeep\\jeep.obj", m_VAO, -1, glm::vec3(0.0f, 0.0f, 0.0f));
 
 	vecModel.insert(vecModel.end(), { m_mHull, m_mWingRight, m_mWingLeft, m_mPropeller, m_mGunBase, m_mGun, m_mJeep });
+
+	//vecModel.insert(vecModel.end(), { m_mHull});
 
 	return Helpers::CheckForGLError();
 
@@ -113,12 +128,22 @@ GLboolean Renderer::LoadTerrain() {
 
 }
 
+void Renderer::SetModelTransform(glm::mat4 matrix) {
+
+	GLuint model_xform_id = glGetUniformLocation(m_program, "model_xform");
+
+	glUniformMatrix4fv(model_xform_id, 1, GL_FALSE, glm::value_ptr(matrix));
+
+}
+
 // Load / create geometry into OpenGL buffers	
 bool Renderer::InitialiseGeometry()
 {
 	// Load and compile shaders into m_program
 	if (!CreateProgram())
 		return false;
+
+	SetHierarchy();
 
 	// Good idea to check for an error now:	
 	Helpers::CheckForGLError();
@@ -139,7 +164,7 @@ void Renderer::Render(const Helpers::Camera& camera, float deltaTime)
 	ClearScreen();
 	UpdateViewTransform(camera.GetPosition(), camera.GetLookVector(), camera.GetUpVector());
 
-	//Use oour program. Doing this enables the shaders we attached
+	//Use our program. Doing this enables the shaders we attached
 	glUseProgram(m_program);
 
 	GLuint combined_xform_id = glGetUniformLocation(m_program, "combined_xform"); //need a way to put this in a function
@@ -149,17 +174,27 @@ void Renderer::Render(const Helpers::Camera& camera, float deltaTime)
 	glBindTexture(GL_TEXTURE_2D, 1);
 	glUniform1i(glGetUniformLocation(m_program, "sampler_tex"), 0);
 
-	for (auto& x : vecRenderables) { //send off xform for each model
+	//for (auto& x : vecTerrain) { //draws all terrain
+	//	//move draw into a function
+
+	//	SetModelTransform(glm::mat4(1));
+	//	glBindVertexArray(x->GetVAO());
+	//	glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(x->GetNumElements()), GL_UNSIGNED_INT, (void*)0);
+
+	//}
+
+	for (auto& x : vecModel) { //draws all models
+
+		//SetModelTransform(x->GetTransform());
 
 		glm::mat4 model_xform = glm::mat4(1);
 
-		model_xform = x->GetTransform();
+		model_xform = glm::translate(model_xform, x->GetTransform());
+
 		GLuint model_xform_id = glGetUniformLocation(m_program, "model_xform");
+
 		glUniformMatrix4fv(model_xform_id, 1, GL_FALSE, glm::value_ptr(model_xform));
 
-	}
-
-	for (auto& x : vecRenderables) {
 
 		glBindVertexArray(x->GetVAO());
 		glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(x->GetNumElements()), GL_UNSIGNED_INT, (void*)0);
@@ -168,6 +203,12 @@ void Renderer::Render(const Helpers::Camera& camera, float deltaTime)
 
 	// Always a good idea, when debugging at least, to check for GL errors
 	Helpers::CheckForGLError();
+}
+
+void Renderer::MoveBoat(glm::vec3 v) {
+
+	//vecModel[0]->Translate(v);
+
 }
 
 /*

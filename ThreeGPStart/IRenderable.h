@@ -12,7 +12,6 @@ public:
 
 	IRenderable(const std::string& Filename) : m_strFilename(Filename) {}
 
-	glm::mat4 GetTransform() const { return m_m4CombinedTransform; }
 	GLuint64EXT GetNumElements() const { return m_stNumElements; }
 	GLuint GetVAO() const { return m_unVAO; }
 

@@ -4,7 +4,7 @@ Model::Model(const std::string& ModelFilename, GLuint VAO, GLint ParentIndex, gl
 
 	m_strFilename = ModelFilename;
 	m_unVAO = VAO;
-	m_unParentID = ParentIndex;
+	m_nParentID = ParentIndex;
 	m_v3Translation = Translation;
 	m_v3RotationAxis = Axis;
 	m_fDegrees = Degrees;
@@ -17,6 +17,18 @@ Model::~Model()
 {
 }
 
+void Model::SetTransform() {
+
+	this->m_v3CombinedTransform += m_v3Translation;
+
+}
+
+GLint Model::GetParent() const {
+
+	return this->m_nParentID;
+
+}
+
 void Model::Translate(glm::vec3 xform) {
 
 	this->m_v3CombinedTransform += xform;
@@ -26,14 +38,6 @@ void Model::Translate(glm::vec3 xform) {
 void Model::Translate(GLint x, GLint y, GLint z) {
 
 	this->m_v3CombinedTransform += glm::vec3(x, y, z);
-
-}
-
-void Model::SetTransform() {
-
-	glm::vec4 v(this->m_v3CombinedTransform, 1.0);
-	this->m_m4CombinedTransform *= v;
-	if(!(this->m_fDegrees > -1.0f && this->m_fDegrees < 1.0f)) this->m_m4CombinedTransform = glm::rotate(this->m_m4CombinedTransform, m_fDegrees, m_v3RotationAxis);
 
 }
 

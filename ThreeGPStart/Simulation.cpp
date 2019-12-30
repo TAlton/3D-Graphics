@@ -33,6 +33,7 @@ bool Simulation::HandleInput(GLFWwindow* window)
 
 	if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_F1)) SetPolyModeFill();
 	if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_F2)) SetPolyModeWireframe();
+	//if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_Y)) MoveObject();
 
 	// To see an example of input using GLFW see the camera.cpp file.
 	return true;
@@ -50,6 +51,17 @@ void Simulation::SetPolyModeFill() const {
 
 }
 
+void Simulation::MoveObject() {
+
+	if (m_fTime < 100) {
+		m_fTime = 0;
+		return;
+	}
+
+	m_renderer->MoveBoat(glm::vec3(1, 0, 0));
+
+}
+
 // Update the simulation (and render) returns false if program should close
 bool Simulation::Update(GLFWwindow* window)
 {
@@ -62,6 +74,7 @@ bool Simulation::Update(GLFWwindow* window)
 	float timeNow = (float)glfwGetTime();
 	float deltaTime{ timeNow - m_lastTime };
 	m_lastTime = timeNow;
+	m_fTime += m_lastTime; //for input handling
 
 	// The camera needs updating to handle user input internally
 	m_camera->Update(window, deltaTime);
