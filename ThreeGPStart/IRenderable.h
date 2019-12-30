@@ -12,7 +12,7 @@ public:
 
 	IRenderable(const std::string& Filename) : m_strFilename(Filename) {}
 
-	glm::vec3 GetTransform() const { return m_v3CombinedTransform; }
+	glm::mat4 GetTransform() const { return m_m4CombinedTransform; }
 	GLuint64EXT GetNumElements() const { return m_stNumElements; }
 	GLuint GetVAO() const { return m_unVAO; }
 
@@ -31,6 +31,8 @@ protected:
 	glm::vec3 m_v3Translation{ 0.0f, 0.0f, 0.0f },
 		m_v3CombinedTransform{ 0.0f, 0.0f, 0.0f },
 		m_v3RotationAxis{ 0.0f, 0.0f, 0.0f };
+	
+	glm::mat4 m_m4CombinedTransform{1};
 
 	GLuint64EXT m_stNumElements{ 0 };
 

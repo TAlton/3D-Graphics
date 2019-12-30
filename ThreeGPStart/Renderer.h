@@ -41,6 +41,8 @@ private:
 	GLboolean LoadTerrain();
 
 	std::vector<IRenderable*> vecRenderables;
+	std::vector<Terrain*> vecTerrain;
+	std::vector<Model*> vecModel;
 
 public:
 

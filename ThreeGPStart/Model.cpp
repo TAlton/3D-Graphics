@@ -19,21 +19,21 @@ Model::~Model()
 
 void Model::Translate(glm::vec3 xform) {
 
-	this->m_v3Translation += xform;
+	this->m_v3CombinedTransform += xform;
 
 }
 
 void Model::Translate(GLint x, GLint y, GLint z) {
 
-	this->m_v3Translation.x += x;
-	this->m_v3Translation.y += y;
-	this->m_v3Translation.z += z;
+	this->m_v3CombinedTransform += glm::vec3(x, y, z);
 
 }
 
 void Model::SetTransform() {
 
-	this->m_v3CombinedTransform += this->m_v3Translation;
+	glm::vec4 v(this->m_v3CombinedTransform, 1.0);
+	this->m_m4CombinedTransform *= v;
+	if(!(this->m_fDegrees > -1.0f && this->m_fDegrees < 1.0f)) this->m_m4CombinedTransform = glm::rotate(this->m_m4CombinedTransform, m_fDegrees, m_v3RotationAxis);
 
 }
 

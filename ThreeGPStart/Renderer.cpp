@@ -95,8 +95,9 @@ GLboolean Renderer::LoadModels() {
 	Model* m_mPropeller = new Model("Data\\Models\\AquaPig\\propeller.obj", m_VAO, 0, glm::vec3(0.0f, 0.272f, -2.663f), glm::vec3(1.0f, 0.0f, 0.0f), 90.0f);
 	Model* m_mGunBase = new Model("Data\\Models\\AquaPig\\gun_base.obj", m_VAO, 0, glm::vec3(0.0f, 0.569f, -1.866f));
 	Model* m_mGun = new Model("Data\\Models\\AquaPig\\gun.obj", m_VAO, 4, glm::vec3(0.0f, 1.506f, 0.644f));
+	Model* m_mJeep = new Model("Data\\Models\\Jeep\\jeep.obj", m_VAO, -1, glm::vec3(0.0f, 0.0f, 0.0f));
 
-	vecRenderables.insert(vecRenderables.end(), { m_mHull, m_mWingRight, m_mWingLeft, m_mPropeller, m_mGunBase, m_mGun });
+	vecModel.insert(vecModel.end(), { m_mHull, m_mWingRight, m_mWingLeft, m_mPropeller, m_mGunBase, m_mGun, m_mJeep });
 
 	return Helpers::CheckForGLError();
 
@@ -106,7 +107,7 @@ GLboolean Renderer::LoadTerrain() {
 
 	Terrain* m_tGrass = new Terrain("Data\\Textures\\grass11.bmp", "Data\\Textures\\curvy.gif", m_VAO, 256, 256);
 
-	vecRenderables.push_back(m_tGrass);
+	vecTerrain.push_back(m_tGrass);
 
 	return Helpers::CheckForGLError();
 
@@ -118,8 +119,6 @@ bool Renderer::InitialiseGeometry()
 	// Load and compile shaders into m_program
 	if (!CreateProgram())
 		return false;
-
-	// TODO - load mesh using the Helpers::ModelLoader class
 
 	// Good idea to check for an error now:	
 	Helpers::CheckForGLError();
@@ -153,7 +152,8 @@ void Renderer::Render(const Helpers::Camera& camera, float deltaTime)
 	for (auto& x : vecRenderables) { //send off xform for each model
 
 		glm::mat4 model_xform = glm::mat4(1);
-		model_xform = glm::translate(model_xform, x->GetTransform());
+
+		model_xform = x->GetTransform();
 		GLuint model_xform_id = glGetUniformLocation(m_program, "model_xform");
 		glUniformMatrix4fv(model_xform_id, 1, GL_FALSE, glm::value_ptr(model_xform));
 
