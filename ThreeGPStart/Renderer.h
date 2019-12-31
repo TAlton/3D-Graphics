@@ -9,6 +9,8 @@
 #include "Terrain.h"
 #include "Model.h"
 
+#define TEXTURE 33984
+
 class Renderer
 {
 private:
@@ -17,7 +19,8 @@ private:
 	GLuint m_program{ 0 };
 
 	// Vertex Array Object to wrap all render settings
-	GLuint m_VAO{ 0 };
+	GLuint m_VAO{ 0 },
+		m_unTexID{ 0 };
 
 	// Number of elments to use when rendering
 	GLuint m_numElements{ 0 };
@@ -45,6 +48,7 @@ private:
 
 	void SetModelTransform(Model& m);
 	void SetTerrainTransform();
+	void BindTexture(GLuint i);
 
 	std::vector<Terrain*> vecTerrain;
 	std::vector<Model*> vecModel;

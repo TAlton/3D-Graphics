@@ -7,7 +7,7 @@ class Terrain :
 
 public:
 
-	Terrain(const std::string& ModelFilename, const std::string& HeightmapFilename, GLuint VAO, GLint x = 0, GLint y = 0);
+	Terrain(const std::string& ModelFilename, const std::string& HeightmapFilename, GLuint VAO, GLint x = 0, GLint y = 0, GLint TexID = 1);
 	~Terrain();
 
 private:
@@ -26,8 +26,7 @@ private:
 
 	GLbyte* m_pbImageData = nullptr;
 
-	Helpers::ImageLoader m_ilImage,
-		m_ilHeightmap;
+	Helpers::ImageLoader m_ilHeightmap;
 
 	GLboolean SetNormals();
 	GLboolean SetPositions();
@@ -37,7 +36,6 @@ private:
 	void SmoothNormals();
 
 	GLboolean Initialise() override final;
-	GLboolean SetTextureBuffer();
 
 };
 

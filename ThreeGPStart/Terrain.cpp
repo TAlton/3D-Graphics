@@ -1,9 +1,10 @@
 #include "Terrain.h"
 
-Terrain::Terrain(const std::string& ModelFilename, const std::string& HeightmapFilename, GLuint VAO, GLint x, GLint y) : IRenderable(ModelFilename) {
+Terrain::Terrain(const std::string& ModelFilename, const std::string& HeightmapFilename, GLuint VAO, GLint x, GLint y, GLint TexID) : IRenderable(ModelFilename) {
 
-	m_ilImage.Load(ModelFilename);
 	m_ilHeightmap.Load(HeightmapFilename);
+
+	m_strImageFilename = ModelFilename;
 
 	m_unNumCellsX = x;
 	m_unNumCellsZ = y;
@@ -14,6 +15,8 @@ Terrain::Terrain(const std::string& ModelFilename, const std::string& HeightmapF
 
 	m_fVertXToImage = static_cast<GLfloat>(m_ilHeightmap.Width()) / m_unNumVertsX;
 	m_fVertZToImage = static_cast<GLfloat>(m_ilHeightmap.Height()) / m_unNumVertsZ;
+
+	m_unTexture = TexID;	
 
 	m_pbImageData = m_ilHeightmap.GetData();
 
@@ -165,24 +168,9 @@ GLboolean Terrain::Initialise() {
 	SetUV();
 	SmoothNormals();
 	SetBuffers();
-	SetTextureBuffer();
+	SetTexture();
 	BindVao();
 	SetBufferPointers();
-
-	return !Helpers::CheckForGLError();
-
-}
-
-GLboolean Terrain::SetTextureBuffer() {
-
-	glGenTextures(1, &m_unTexture);
-	glBindTexture(GL_TEXTURE_2D, m_unTexture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_ilImage.Width(), m_ilImage.Height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, m_ilImage.GetData());
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glGenerateMipmap(GL_TEXTURE_2D);
 
 	return !Helpers::CheckForGLError();
 

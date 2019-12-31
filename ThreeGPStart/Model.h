@@ -6,7 +6,9 @@ class Model :
 
 public:
 
-	Model(const std::string& ModelFilename, GLuint VAO, GLint ParentIndex, glm::vec3 Translation = { 0, 0, 0 }, glm::vec3 Axis = { 0, 0, 0 }, GLfloat Degrees = 0.0f, const std::string& TextureFilename = "\0");
+	Model(const std::string& ModelFilename, GLuint VAO, GLint ParentIndex, glm::vec3 Translation = { 0, 0, 0 }, glm::vec3 Axis = { 0, 0, 0 }, GLfloat Degrees = 0.0f, const std::string& TextureFilename = "default", GLint TexID = 1);
+	Model(const std::string& ModelFilename, GLuint VAO, const std::string& TextureFilename = "default", GLint TexID = 1);
+	Model(const std::string& ModelFilename, GLuint VAO, GLint ParentIndex, const std::string& TextureFilename = "default", GLint TexID = 1);
 	~Model();
 
 

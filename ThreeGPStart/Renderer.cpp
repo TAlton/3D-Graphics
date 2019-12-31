@@ -95,20 +95,19 @@ void Renderer::SetHierarchy() { //possible not needed
 
 		x->Translate(vecModel[x->GetParent()]->GetTransform());
 		
-
 	}
 
 }
 
 GLboolean Renderer::LoadModels() {
 
-	Model* m_mHull = new Model("Data\\Models\\AquaPig\\hull.obj", m_VAO, -1, glm::vec3(0.0f, 0.0f, 0.0f));
+	Model* m_mHull = new Model("Data\\Models\\AquaPig\\hull.obj", m_VAO,  -1, glm::vec3(0.0f, 0.0f, 0.0f));
 	Model* m_mWingRight = new Model("Data\\Models\\AquaPig\\wing_right.obj", m_VAO, 0, glm::vec3(-2.231f, 0.272f, -2.663f));
-	Model* m_mWingLeft = new Model("Data\\Models\\AquaPig\\wing_left.obj", m_VAO, 0, glm::vec3(2.231f, 0.272f, -2.663f));
-	Model* m_mPropeller = new Model("Data\\Models\\AquaPig\\propeller.obj", m_VAO, 0, glm::vec3(0.0f, 1.395f, -3.616f), glm::vec3(1.0f, 0.0f, 0.0f), 90.0f);
-	Model* m_mGunBase = new Model("Data\\Models\\AquaPig\\gun_base.obj", m_VAO, 0, glm::vec3(0.0f, 0.569f, -1.866f));
-	Model* m_mGun = new Model("Data\\Models\\AquaPig\\gun.obj", m_VAO, 4, glm::vec3(0.0f, 1.506f, 0.644f));
-	Model* m_mJeep = new Model("Data\\Models\\Jeep\\jeep.obj", m_VAO, -1, glm::vec3(0.0f, 0.0f, 0.0f));
+	Model* m_mWingLeft = new Model("Data\\Models\\AquaPig\\wing_left.obj", m_VAO,  0, glm::vec3(2.231f, 0.272f, -2.663f));
+	Model* m_mPropeller = new Model("Data\\Models\\AquaPig\\propeller.obj", m_VAO,  0, glm::vec3(0.0f, 1.395f, -3.616f), glm::vec3(1.0f, 0.0f, 0.0f), 90.0f);
+	Model* m_mGunBase = new Model("Data\\Models\\AquaPig\\gun_base.obj", m_VAO,  0, glm::vec3(0.0f, 0.569f, -1.866f));
+	Model* m_mGun = new Model("Data\\Models\\AquaPig\\gun.obj", m_VAO, 4,  glm::vec3(0.0f, 1.506f, 0.644f));
+	Model* m_mJeep = new Model("Data\\Models\\Jeep\\jeep.obj", m_VAO, "Data\\Models\\Jeep\\jeep_army.jpg", m_unTexID);
 
 	vecModel.insert(vecModel.end(), { m_mHull, m_mWingRight, m_mWingLeft, m_mPropeller, m_mGunBase, m_mGun, m_mJeep });
 
@@ -118,7 +117,7 @@ GLboolean Renderer::LoadModels() {
 
 GLboolean Renderer::LoadTerrain() {
 
-	Terrain* m_tGrass = new Terrain("Data\\Textures\\grass11.bmp", "Data\\Textures\\curvy.gif", m_VAO, 256, 256);
+	Terrain* m_tGrass = new Terrain("Data\\Textures\\grass11.bmp", "Data\\Textures\\curvy.gif", m_VAO, 256, 256, m_unTexID);
 
 	vecTerrain.push_back(m_tGrass);
 
@@ -157,6 +156,16 @@ void Renderer::SetTerrainTransform() {
 
 }
 
+void Renderer::BindTexture(GLuint i) {
+
+	if (-1 == i) return;
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, i);
+	glUniform1i(glGetUniformLocation(m_program, "sampler_tex"), 0);
+
+}
+
 // Load / create geometry into OpenGL buffers	
 bool Renderer::InitialiseGeometry()
 {
@@ -191,13 +200,9 @@ void Renderer::Render(const Helpers::Camera& camera, float deltaTime)
 	GLuint combined_xform_id = glGetUniformLocation(m_program, "combined_xform"); //need a way to put this in a function
 	glUniformMatrix4fv(combined_xform_id, 1, GL_FALSE, glm::value_ptr(m_m4CombinedTransform));
 
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, 1);
-	glUniform1i(glGetUniformLocation(m_program, "sampler_tex"), 0);
-
 	for (auto& x : vecTerrain) { //draws all terrain
 		//move draw into a function
-
+		BindTexture(x->GetTextureID());
 		SetTerrainTransform();
 		glBindVertexArray(x->GetVAO());
 		glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(x->GetNumElements()), GL_UNSIGNED_INT, (void*)0);
@@ -206,8 +211,8 @@ void Renderer::Render(const Helpers::Camera& camera, float deltaTime)
 
 	for (auto& x : vecModel) { //draws all models
 
+		BindTexture(x->GetTextureID());
 		SetModelTransform(*x);
-
 		glBindVertexArray(x->GetVAO());
 		glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(x->GetNumElements()), GL_UNSIGNED_INT, (void*)0);
 

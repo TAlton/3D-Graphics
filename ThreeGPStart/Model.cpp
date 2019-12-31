@@ -1,6 +1,6 @@
 #include "Model.h"
 
-Model::Model(const std::string& ModelFilename, GLuint VAO, GLint ParentIndex, glm::vec3 Translation, glm::vec3 Axis, GLfloat Degrees) : IRenderable(ModelFilename) {
+Model::Model(const std::string& ModelFilename, GLuint VAO, GLint ParentIndex, glm::vec3 Translation, glm::vec3 Axis, GLfloat Degrees, const std::string& TextureFilename, GLint TexID) : IRenderable(ModelFilename) {
 
 	m_strFilename = ModelFilename;
 	m_unVAO = VAO;
@@ -8,6 +8,33 @@ Model::Model(const std::string& ModelFilename, GLuint VAO, GLint ParentIndex, gl
 	m_v3Translation = Translation;
 	m_v3RotationAxis = Axis;
 	m_fDegrees = Degrees;
+	if(TextureFilename != "default") m_strImageFilename = TextureFilename;
+	m_unTexture = TexID;
+
+	Initialise();
+
+}
+
+Model::Model(const std::string& ModelFilename, GLuint VAO, const std::string& TextureFilename, GLint TexID) : IRenderable(ModelFilename) {
+
+	m_strFilename = ModelFilename;
+	m_unVAO = VAO;
+	m_v3Translation = glm::vec3(0, 0, 0);
+	if (TextureFilename != "default") m_strImageFilename = TextureFilename;
+	m_unTexture = TexID;
+
+	Initialise();
+
+}
+
+Model::Model(const std::string& ModelFilename, GLuint VAO, GLint ParentIndex, const std::string& TextureFilename, GLint TexID) : IRenderable(ModelFilename) {
+
+	m_strFilename = ModelFilename;
+	m_unVAO = VAO;
+	m_nParentID = ParentIndex;
+	m_v3Translation = glm::vec3(0, 0, 0);
+	if (TextureFilename != "default") m_strImageFilename = TextureFilename;
+	m_unTexture = TexID;
 
 	Initialise();
 
@@ -47,6 +74,7 @@ GLboolean Model::Initialise() {
 	SetTransform();
 	SetVectors();
 	SetBuffers();
+	SetTexture();
 	BindVao();
 	SetBufferPointers();
 
