@@ -105,14 +105,12 @@ GLboolean Renderer::LoadModels() {
 	Model* m_mHull = new Model("Data\\Models\\AquaPig\\hull.obj", m_VAO, -1, glm::vec3(0.0f, 0.0f, 0.0f));
 	Model* m_mWingRight = new Model("Data\\Models\\AquaPig\\wing_right.obj", m_VAO, 0, glm::vec3(-2.231f, 0.272f, -2.663f));
 	Model* m_mWingLeft = new Model("Data\\Models\\AquaPig\\wing_left.obj", m_VAO, 0, glm::vec3(2.231f, 0.272f, -2.663f));
-	Model* m_mPropeller = new Model("Data\\Models\\AquaPig\\propeller.obj", m_VAO, 0, glm::vec3(0.0f, 0.272f, -2.663f), glm::vec3(1.0f, 0.0f, 0.0f), 90.0f);
+	Model* m_mPropeller = new Model("Data\\Models\\AquaPig\\propeller.obj", m_VAO, 0, glm::vec3(0.0f, 1.395f, -3.616f), glm::vec3(1.0f, 0.0f, 0.0f), 90.0f);
 	Model* m_mGunBase = new Model("Data\\Models\\AquaPig\\gun_base.obj", m_VAO, 0, glm::vec3(0.0f, 0.569f, -1.866f));
 	Model* m_mGun = new Model("Data\\Models\\AquaPig\\gun.obj", m_VAO, 4, glm::vec3(0.0f, 1.506f, 0.644f));
 	Model* m_mJeep = new Model("Data\\Models\\Jeep\\jeep.obj", m_VAO, -1, glm::vec3(0.0f, 0.0f, 0.0f));
 
 	vecModel.insert(vecModel.end(), { m_mHull, m_mWingRight, m_mWingLeft, m_mPropeller, m_mGunBase, m_mGun, m_mJeep });
-
-	//vecModel.insert(vecModel.end(), { m_mHull});
 
 	return Helpers::CheckForGLError();
 
@@ -128,11 +126,34 @@ GLboolean Renderer::LoadTerrain() {
 
 }
 
-void Renderer::SetModelTransform(glm::mat4 matrix) {
+void Renderer::SetModelTransform(Model& m) { //need to clean this up
+
+	glm::mat4 model_xform = glm::mat4(1);
+
+	model_xform = glm::translate(model_xform, m.GetTransform());
+
+	if (m.GetDegrees() > 0.1f) { //TRS
+		
+		deg += 2.5f;
+		if (deg > 358.0f) deg = 0.0f;
+		model_xform = glm::rotate(model_xform, glm::radians(m.GetDegrees()), m.GetAxis());
+		model_xform = glm::rotate(model_xform, glm::radians(deg), glm::vec3(0, 1, 0));
+
+	}
 
 	GLuint model_xform_id = glGetUniformLocation(m_program, "model_xform");
 
-	glUniformMatrix4fv(model_xform_id, 1, GL_FALSE, glm::value_ptr(matrix));
+	glUniformMatrix4fv(model_xform_id, 1, GL_FALSE, glm::value_ptr(model_xform));
+
+}
+
+void Renderer::SetTerrainTransform() {
+
+	glm::mat4 model_xform = glm::mat4(1);
+
+	GLuint model_xform_id = glGetUniformLocation(m_program, "model_xform");
+
+	glUniformMatrix4fv(model_xform_id, 1, GL_FALSE, glm::value_ptr(model_xform));
 
 }
 
@@ -174,27 +195,18 @@ void Renderer::Render(const Helpers::Camera& camera, float deltaTime)
 	glBindTexture(GL_TEXTURE_2D, 1);
 	glUniform1i(glGetUniformLocation(m_program, "sampler_tex"), 0);
 
-	//for (auto& x : vecTerrain) { //draws all terrain
-	//	//move draw into a function
+	for (auto& x : vecTerrain) { //draws all terrain
+		//move draw into a function
 
-	//	SetModelTransform(glm::mat4(1));
-	//	glBindVertexArray(x->GetVAO());
-	//	glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(x->GetNumElements()), GL_UNSIGNED_INT, (void*)0);
+		SetTerrainTransform();
+		glBindVertexArray(x->GetVAO());
+		glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(x->GetNumElements()), GL_UNSIGNED_INT, (void*)0);
 
-	//}
+	}
 
 	for (auto& x : vecModel) { //draws all models
 
-		//SetModelTransform(x->GetTransform());
-
-		glm::mat4 model_xform = glm::mat4(1);
-
-		model_xform = glm::translate(model_xform, x->GetTransform());
-
-		GLuint model_xform_id = glGetUniformLocation(m_program, "model_xform");
-
-		glUniformMatrix4fv(model_xform_id, 1, GL_FALSE, glm::value_ptr(model_xform));
-
+		SetModelTransform(*x);
 
 		glBindVertexArray(x->GetVAO());
 		glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(x->GetNumElements()), GL_UNSIGNED_INT, (void*)0);
@@ -207,7 +219,11 @@ void Renderer::Render(const Helpers::Camera& camera, float deltaTime)
 
 void Renderer::MoveBoat(glm::vec3 v) {
 
-	//vecModel[0]->Translate(v);
+	for (auto& x : vecModel) {
+
+		x->Translate(v);
+
+	}
 
 }
 
@@ -222,10 +238,6 @@ lights from the tutorial
 multiple textures
 
 perlin noise
-
-model movement within scene
-
-moving part of a model (propeller for the aqua pig)
 
 headlights (this is just a directional light, that is placed on the model and rotates and moves with it
 

@@ -6,18 +6,19 @@ class Model :
 
 public:
 
-	Model(const std::string& ModelFilename, GLuint VAO, GLint ParentIndex, glm::vec3 Translation = { 0, 0, 0 }, glm::vec3 Axis = { 0, 0, 0 }, GLfloat Degrees = 0.0f);
+	Model(const std::string& ModelFilename, GLuint VAO, GLint ParentIndex, glm::vec3 Translation = { 0, 0, 0 }, glm::vec3 Axis = { 0, 0, 0 }, GLfloat Degrees = 0.0f, const std::string& TextureFilename = "\0");
 	~Model();
 
 
 
 	GLint GetParent() const;
 
-	void Translate(glm::vec3 xform);
+	void Translate(glm::vec3 xform = glm::vec3(0, 0, 0));
 	void Translate(GLint x = 0, GLint y = 0, GLint z = 0);
 
 	glm::vec3 GetTransform() { return this->m_v3CombinedTransform; }
-
+	GLfloat GetDegrees() { return this->m_fDegrees; }
+	glm::vec3 GetAxis() { return this->m_v3RotationAxis; }
 
 private:
 
@@ -26,11 +27,12 @@ private:
 	GLfloat m_fDegrees{ 0.0f };
 
 	Helpers::ModelLoader m_mlModel;
-	void SetTransform();
+
 
 	GLboolean Initialise() override final;
 	GLboolean SetVectors();
 	GLboolean LoadMesh();
+	void SetTransform();
 
 };
 

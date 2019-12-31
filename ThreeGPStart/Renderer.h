@@ -28,6 +28,8 @@ private:
 		m_m4ViewTransform{ 0 },
 		m_m4CombinedTransform{ 0 };
 
+	GLfloat deg;
+
 	bool CreateProgram();
 	//clears the screen to a colour
 	GLboolean ClearScreen() const;
@@ -41,7 +43,8 @@ private:
 	GLboolean LoadModels();
 	GLboolean LoadTerrain();
 
-	void SetModelTransform(glm::mat4 matrix);
+	void SetModelTransform(Model& m);
+	void SetTerrainTransform();
 
 	std::vector<Terrain*> vecTerrain;
 	std::vector<Model*> vecModel;

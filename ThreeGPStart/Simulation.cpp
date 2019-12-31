@@ -33,6 +33,11 @@ bool Simulation::HandleInput(GLFWwindow* window)
 
 	if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_F1)) SetPolyModeFill();
 	if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_F2)) SetPolyModeWireframe();
+	if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_Y)) MoveObject(0, 1);
+	if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_G)) MoveObject(1);
+	if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_H)) MoveObject(0, -1);
+	if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_J)) MoveObject(-1);
+
 	//if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_Y)) MoveObject();
 
 	// To see an example of input using GLFW see the camera.cpp file.
@@ -51,14 +56,14 @@ void Simulation::SetPolyModeFill() const {
 
 }
 
-void Simulation::MoveObject() {
+void Simulation::MoveObject(GLint x, GLint z) {
 
 	if (m_fTime < 100) {
 		m_fTime = 0;
 		return;
 	}
 
-	m_renderer->MoveBoat(glm::vec3(1, 0, 0));
+	m_renderer->MoveBoat(glm::vec3(x, 0, z));
 
 }
 
