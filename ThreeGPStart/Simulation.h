@@ -30,7 +30,7 @@ private:
 	//set as GL_FILL
 	void SetPolyModeFill() const;
 
-	void MoveObject(GLint x = 0, GLint z = 0);
+	void MoveObject(GLint x = 0, GLint y = 0, GLint z = 0);
 
 public:
 	// Initialise this as well as the renderer, returns false on error

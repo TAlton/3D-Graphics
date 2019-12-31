@@ -18,7 +18,7 @@ void main(void)
 	//fragment_colour = vec4(n, n, n, 1.0f);
 
 	
-	vec3 light_position = vec3(0, 400, 0);
+	vec3 light_position = vec3(0, 100, 0);
 
 	//vec3 light_direction = vec3(-0.9, -0.1, 0); //spot light
 

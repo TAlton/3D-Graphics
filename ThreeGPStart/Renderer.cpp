@@ -108,8 +108,9 @@ GLboolean Renderer::LoadModels() {
 	Model* m_mGunBase = new Model("Data\\Models\\AquaPig\\gun_base.obj", m_VAO,  0, glm::vec3(0.0f, 0.569f, -1.866f));
 	Model* m_mGun = new Model("Data\\Models\\AquaPig\\gun.obj", m_VAO, 4,  glm::vec3(0.0f, 1.506f, 0.644f));
 	Model* m_mJeep = new Model("Data\\Models\\Jeep\\jeep.obj", m_VAO, "Data\\Models\\Jeep\\jeep_army.jpg", m_unTexID);
+	Model* m_mSun = new Model("Data\\Models\\earth.obj", m_VAO, -1, glm::vec3(0, 100, 0));
 
-	vecModel.insert(vecModel.end(), { m_mHull, m_mWingRight, m_mWingLeft, m_mPropeller, m_mGunBase, m_mGun, m_mJeep });
+	vecModel.insert(vecModel.end(), { m_mHull, m_mWingRight, m_mWingLeft, m_mPropeller, m_mGunBase, m_mGun, m_mJeep, m_mSun });
 
 	return Helpers::CheckForGLError();
 
@@ -239,8 +240,6 @@ todo
 lights from the tutorial
 ----directional
 ----ambient
-
-multiple textures
 
 perlin noise
 
