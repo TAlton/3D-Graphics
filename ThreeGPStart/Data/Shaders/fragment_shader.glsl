@@ -8,6 +8,15 @@ in vec3 v_normal;
 in vec3 v_position;
 in vec2 TexCoord;
 
+uniform struct Light {
+
+	vec3 position;
+	vec3 colour;
+	float attenuation;
+	float ambient;
+
+} light[10];
+
 void main(void)
 {
 	//fragment_colour = vec4(N, 1.0f);

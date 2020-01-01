@@ -5,7 +5,6 @@
 Renderer::~Renderer()
 {
 	glDeleteProgram(m_program);
-	glDeleteProgram(m_program2);
 	glDeleteBuffers(1, &m_VAO);
 }
 
@@ -39,9 +38,6 @@ bool Renderer::CreateProgram()
 	// Link the shaders, checking for errors
 	if (!Helpers::LinkProgramShaders(m_program))
 		return false;
-
-	if (!Helpers::LinkProgramShaders(m_program2))
-		return FALSE;
 
 	//calculates view and projection matricies
 	ComputeViewport();
@@ -243,7 +239,14 @@ void Renderer::MoveBoat(glm::vec3 v) {
 
 todo
 
+skybox
+---create and draw square
+---make square follow camera
+------draw texture on inside of the cube
+
 multiple lights
+---create light struct
+------pass lights into
 
 perlin noise
 
