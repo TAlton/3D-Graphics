@@ -9,14 +9,19 @@
 #include "Terrain.h"
 #include "Model.h"
 
-#define TEXTURE 33984
+struct Light {
+
+
+
+};
 
 class Renderer
 {
 private:
 
 	// Program object - to host shaders
-	GLuint m_program{ 0 };
+	GLuint m_program{ 0 },
+		m_program2{ 0 };
 
 	// Vertex Array Object to wrap all render settings
 	GLuint m_VAO{ 0 },
@@ -45,6 +50,7 @@ private:
 	void SetHierarchy();
 	GLboolean LoadModels();
 	GLboolean LoadTerrain();
+	GLboolean LoadSkybox();
 
 	void SetModelTransform(Model& m);
 	void SetTerrainTransform();

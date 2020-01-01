@@ -18,7 +18,7 @@ Terrain::Terrain(const std::string& ModelFilename, const std::string& HeightmapF
 
 	m_unTexture = TexID;	
 
-	m_pbImageData = m_ilHeightmap.GetData();
+	m_pcImageData = m_ilHeightmap.GetData();
 
 	Initialise();
 
@@ -124,7 +124,7 @@ void Terrain::ApplyHeightmap() {
 
 			GLint64 offset = ((GLint64)imageX + (GLint64)imageZ * m_ilHeightmap.Width()) * 4;		
 
-			GLubyte h = m_pbImageData[offset];
+			GLubyte h = m_pcImageData[offset];
 
 			m_vecv3Positions[m_unCurrentVertex].y = (GLfloat)-h / 4;
 			m_unCurrentVertex++;

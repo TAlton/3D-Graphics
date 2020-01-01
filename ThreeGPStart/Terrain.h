@@ -24,7 +24,7 @@ private:
 
 	GLboolean m_bInvertPattern{ true };
 
-	GLbyte* m_pbImageData = nullptr;
+	GLbyte* m_pcImageData = nullptr;
 
 	Helpers::ImageLoader m_ilHeightmap;
 

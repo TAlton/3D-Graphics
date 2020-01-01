@@ -4,7 +4,8 @@
 // On exit must clean up any OpenGL resources e.g. the program, the buffers
 Renderer::~Renderer()
 {
-	glDeleteProgram(m_program);	
+	glDeleteProgram(m_program);
+	glDeleteProgram(m_program2);
 	glDeleteBuffers(1, &m_VAO);
 }
 
@@ -17,6 +18,7 @@ bool Renderer::CreateProgram()
 	// Load and create vertex and fragment shaders
 	GLuint vertex_shader{ Helpers::LoadAndCompileShader(GL_VERTEX_SHADER, "Data/Shaders/vertex_shader.glsl") };
 	GLuint fragment_shader{ Helpers::LoadAndCompileShader(GL_FRAGMENT_SHADER, "Data/Shaders/fragment_shader.glsl") };
+
 	if (vertex_shader == 0 || fragment_shader == 0)
 		return false;
 
@@ -37,6 +39,9 @@ bool Renderer::CreateProgram()
 	// Link the shaders, checking for errors
 	if (!Helpers::LinkProgramShaders(m_program))
 		return false;
+
+	if (!Helpers::LinkProgramShaders(m_program2))
+		return FALSE;
 
 	//calculates view and projection matricies
 	ComputeViewport();
@@ -188,6 +193,7 @@ bool Renderer::InitialiseGeometry()
 // Render the scene. Passed the delta time since last called.
 void Renderer::Render(const Helpers::Camera& camera, float deltaTime)
 {		
+
 	// Configure pipeline settings
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
@@ -237,12 +243,10 @@ void Renderer::MoveBoat(glm::vec3 v) {
 
 todo
 
+multiple lights
+
 perlin noise
 
 headlights (this is just a spot light, that is placed on the model and rotates and moves with it
-
-Interpolation?
-
-skybox?
 
 */
