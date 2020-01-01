@@ -237,19 +237,12 @@ void Renderer::MoveBoat(glm::vec3 v) {
 
 todo
 
-lights from the tutorial
-----directional
-----ambient
-
 perlin noise
 
-headlights (this is just a directional light, that is placed on the model and rotates and moves with it
+headlights (this is just a spot light, that is placed on the model and rotates and moves with it
 
 Interpolation?
 
 skybox?
-
-
-
 
 */
