@@ -126,7 +126,7 @@ void Terrain::ApplyHeightmap() {
 
 			GLubyte h = m_pcImageData[offset];
 
-			m_vecv3Positions[m_unCurrentVertex].y = (GLfloat)-h / 4;
+			m_vecv3Positions[m_unCurrentVertex].y = (GLfloat)h / 4;
 			m_unCurrentVertex++;
 
 		}
@@ -146,7 +146,7 @@ void Terrain::SmoothNormals() {
 		glm::vec3 v1 = m_vecv3Positions[i2];
 		glm::vec3 v2 = m_vecv3Positions[i3];
 
-		glm::vec3 normal = glm::normalize(glm::cross((v2 - v0), (v1 - v0)));
+		glm::vec3 normal = glm::normalize(glm::cross((v1 - v0), (v2 - v0)));
 
 		m_vecnNormals[i1] += normal;
 		m_vecnNormals[i2] += normal;
