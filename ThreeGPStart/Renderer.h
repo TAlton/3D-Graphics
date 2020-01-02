@@ -22,7 +22,8 @@ class Renderer
 private:
 
 	// Program object - to host shaders
-	GLuint m_program{ 0 };
+	GLuint m_program{ 0 },
+		m_skybox{ 0 };
 
 	// Vertex Array Object to wrap all render settings
 	GLuint m_VAO{ 0 },

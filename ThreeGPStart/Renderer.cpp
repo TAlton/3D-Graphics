@@ -5,6 +5,7 @@
 Renderer::~Renderer()
 {
 	glDeleteProgram(m_program);
+	glDeleteProgram(m_skybox);
 	glDeleteBuffers(1, &m_VAO);
 }
 
@@ -13,30 +14,38 @@ bool Renderer::CreateProgram()
 {
 	// Create a new program (returns a unqiue id)
 	m_program = glCreateProgram();
+	m_skybox = glCreateProgram();
 
 	// Load and create vertex and fragment shaders
 	GLuint vertex_shader{ Helpers::LoadAndCompileShader(GL_VERTEX_SHADER, "Data/Shaders/vertex_shader.glsl") };
 	GLuint fragment_shader{ Helpers::LoadAndCompileShader(GL_FRAGMENT_SHADER, "Data/Shaders/fragment_shader.glsl") };
+	GLuint skybox_vertex_shader{ Helpers::LoadAndCompileShader(GL_VERTEX_SHADER, "Data/Shaders/SkyboxVS.glsl") };
+	GLuint skybox_fragment_shader{ Helpers::LoadAndCompileShader(GL_FRAGMENT_SHADER, "Data/Shaders/SkyboxFS.glsl") };
 
-	if (vertex_shader == 0 || fragment_shader == 0)
+	if (vertex_shader == 0 || fragment_shader == 0 || 0 == skybox_vertex_shader || 0 == skybox_fragment_shader)
 		return false;
 
 	// Attach the vertex shader to this program (copies it)
 	glAttachShader(m_program, vertex_shader);
+	// Attach the fragment shader (copies it)
+	glAttachShader(m_program, fragment_shader);
 
 	// The attibute 0 maps to the input stream "vertex_position" in the vertex shader
 	// Not needed if you use (location=0) in the vertex shader itself
 	//glBindAttribLocation(m_program, 0, "vertex_position");
 
-	// Attach the fragment shader (copies it)
-	glAttachShader(m_program, fragment_shader);
+
+	glAttachShader(m_skybox, skybox_vertex_shader);
+	glAttachShader(m_skybox, skybox_fragment_shader);
 
 	// Done with the originals of these as we have made copies
 	glDeleteShader(vertex_shader);
 	glDeleteShader(fragment_shader);
+	glDeleteShader(skybox_vertex_shader);
+	glDeleteShader(skybox_fragment_shader);
 
 	// Link the shaders, checking for errors
-	if (!Helpers::LinkProgramShaders(m_program))
+	if (!Helpers::LinkProgramShaders(m_program) || !Helpers::LinkProgramShaders(m_skybox))
 		return false;
 
 	//calculates view and projection matricies

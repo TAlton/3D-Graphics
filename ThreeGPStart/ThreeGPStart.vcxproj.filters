@@ -57,12 +57,21 @@
     <ClCompile Include="Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Skybox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Shaders\fragment_shader.glsl">
       <Filter>Shaders</Filter>
     </None>
     <None Include="Data\Shaders\vertex_shader.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Data\Shaders\SkyboxFS.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Data\Shaders\SkyboxVS.glsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
@@ -95,6 +104,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Skybox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
