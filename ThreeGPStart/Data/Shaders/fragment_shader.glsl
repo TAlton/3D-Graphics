@@ -22,6 +22,15 @@ struct PointLight {
 
 };
 
+struct SpotLight {
+
+	vec3 position;
+	float angle;
+	vec3 cone_direction;
+
+};
+
+uniform SpotLight sLight;
 uniform PointLight pLight;
 uniform DirectionalLight dLight;
 
@@ -44,6 +53,19 @@ vec3 CalcPointLight() {
 
 
 	return pLight.light_colour * (diffuse * attenuation);
+
+}
+
+vec3 CalcSpotLight() {
+
+	vec3 lightDir = normalize(sLight.position - v_position);
+	float theta = dot(lightDir, normalize(-sLight.cone_direction));
+
+	if(theta > sLight.angle) {
+
+	 return vec3(0,0,10);
+
+	}
 
 }
 
@@ -92,7 +114,7 @@ void main(void)
 	vec3 tex_colour = texture(sampler_tex, TexCoord).rgb;
 	vec3 N = normalize(v_normal);
 
-	vec3 final_colour = tex_colour * (CalcDirectionalLight(N) + CalcPointLight());
+	vec3 final_colour = tex_colour * (CalcDirectionalLight(N) + CalcPointLight() + CalcSpotLight());
 
 	fragment_colour = vec4(final_colour, 1.0);
 

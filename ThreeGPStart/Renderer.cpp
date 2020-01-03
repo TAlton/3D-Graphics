@@ -252,7 +252,10 @@ void Renderer::Render(const Helpers::Camera& camera, float deltaTime)
 	glUniform3f(glGetUniformLocation(m_program, "pLight.light_colour"), 10, 5, 0);
 	glUniform1f(glGetUniformLocation(m_program, "pLight.light_range"), 100.0f);
 
-
+	//glUniform3f(glGetUniformLocation(m_program, "sLight.position"), vecModel[0]->GetTransform().x, vecModel[0]->GetTransform().y, vecModel[0]->GetTransform().z + 5);
+	glUniform3f(glGetUniformLocation(m_program, "sLight.position"), camera.GetPosition().x, camera.GetPosition().y, camera.GetPosition().z);
+	glUniform1f(glGetUniformLocation(m_program, "sLight.angle"), glm::cos(glm::radians(45.0f)));
+	glUniform3f(glGetUniformLocation(m_program, "sLight.direction"), camera.GetLookVector().x, camera.GetLookVector().y, camera.GetLookVector().z);
 
 
 	for (auto& x : vecTerrain) { //draws all terrain
@@ -292,10 +295,6 @@ GLvoid Renderer::MoveBoat(glm::vec3 v) {
 /*
 
 todo
-
-multiple lights
----create light struct
-------pass lights into
 
 perlin noise
 

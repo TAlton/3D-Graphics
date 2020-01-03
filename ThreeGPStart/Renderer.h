@@ -47,7 +47,7 @@ private:
 	//computes the viewport size for use in projection matricies
 	GLvoid ComputeViewport();
 	//Computes the projection matrix;
-	GLvoid ComputeProjectionTransform(GLfloat fov = 45.0f, GLfloat near = 1.0f, GLfloat far = 2000.0f);
+	GLvoid ComputeProjectionTransform(GLfloat fov = 90.0f, GLfloat near = 1.0f, GLfloat far = 2000.0f);
 	//calculates the view transform and the combined transform from the cameras position and where it is looking
 	GLvoid UpdateViewTransform(glm::vec3 pos, glm::vec3 look, glm::vec3 up);
 	GLvoid SetHierarchy();
