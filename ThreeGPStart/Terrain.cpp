@@ -71,7 +71,7 @@ GLboolean Terrain::SetUV() {
 
 }
 
-void Terrain::CreateMesh() {
+GLvoid Terrain::CreateMesh() {
 
 	for (GLuint cellZ = 0; cellZ < m_unNumCellsZ; cellZ++) {
 
@@ -113,7 +113,7 @@ void Terrain::CreateMesh() {
 
 }
 
-void Terrain::ApplyHeightmap() {
+GLvoid Terrain::ApplyHeightmap() {
 
 	for (GLuint z{ 0 }; z < m_unNumVertsZ; z++) {
 
@@ -135,7 +135,7 @@ void Terrain::ApplyHeightmap() {
 
 }
 
-void Terrain::SmoothNormals() {
+GLvoid Terrain::SmoothNormals() {
 
 	for (GLuint64 i{ 0 }; i < m_vecunElements.size(); i += 3) {
 

@@ -15,8 +15,8 @@ public:
 
 	GLint GetParent() const;
 
-	void Translate(glm::vec3 xform = glm::vec3(0, 0, 0));
-	void Translate(GLint x = 0, GLint y = 0, GLint z = 0);
+	GLvoid Translate(glm::vec3 xform = glm::vec3(0, 0, 0));
+	GLvoid Translate(GLint x = 0, GLint y = 0, GLint z = 0);
 
 	glm::vec3 GetTransform() { return this->m_v3CombinedTransform; }
 	GLfloat GetDegrees() { return this->m_fDegrees; }
@@ -34,7 +34,7 @@ private:
 	GLboolean Initialise() override final;
 	GLboolean SetVectors();
 	GLboolean LoadMesh();
-	void SetTransform();
+	GLvoid SetTransform();
 
 };
 

@@ -8,14 +8,44 @@ in vec3 v_normal;
 in vec3 v_position;
 in vec2 TexCoord;
 
-uniform struct Light {
+struct DirectionalLight {
 
+	vec3 direction;
+
+};
+
+struct PointLight {
+	
 	vec3 position;
-	vec3 colour;
-	float attenuation;
-	float ambient;
+	vec3 light_colour;
+	float light_range;
 
-} light[10];
+};
+
+uniform PointLight pLight;
+uniform DirectionalLight dLight;
+
+float CalcDirectionalLight(vec3 N) {
+
+	vec3 L = normalize(-dLight.direction);
+	float diffuse_intensity = max(0, dot(L,N));
+
+	return diffuse_intensity;
+
+}
+
+vec3 CalcPointLight() {
+
+	vec3 light_direction = normalize(pLight.position - v_position);
+	float diffuse = max(dot(v_normal, light_direction), 0.0);
+
+	float light_distance = length(pLight.position - v_position);
+	float attenuation = 1.0  - smoothstep(0, pLight.light_range, light_distance);
+
+
+	return pLight.light_colour * (diffuse * attenuation);
+
+}
 
 void main(void)
 {
@@ -59,15 +89,12 @@ void main(void)
 //	//tex_colour *= -(v_normal.y);
 //	fragment_colour = vec4(final_colour, 1.0);
 
-	vec3 light_direction = vec3(0.5, -0.5, 0);
-vec3 tex_colour = texture(sampler_tex, TexCoord).rgb;
+	vec3 tex_colour = texture(sampler_tex, TexCoord).rgb;
+	vec3 N = normalize(v_normal);
 
-vec3 L = normalize(-light_direction);
-vec3 N = normalize(v_normal);
-float diffuse_intensity = max(0, dot(L,N));
-vec3 final_colour = tex_colour * diffuse_intensity;
+	vec3 final_colour = tex_colour * (CalcDirectionalLight(N) + CalcPointLight());
 
-fragment_colour = vec4(final_colour, 1.0);
+	fragment_colour = vec4(final_colour, 1.0);
 
 }
 

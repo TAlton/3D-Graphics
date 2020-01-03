@@ -44,7 +44,7 @@ Model::~Model()
 {
 }
 
-void Model::SetTransform() {
+GLvoid Model::SetTransform() {
 
 	this->m_v3CombinedTransform += m_v3Translation;
 
@@ -56,13 +56,13 @@ GLint Model::GetParent() const {
 
 }
 
-void Model::Translate(glm::vec3 xform) {
+GLvoid Model::Translate(glm::vec3 xform) {
 
 	this->m_v3CombinedTransform += xform;
 
 }
 
-void Model::Translate(GLint x, GLint y, GLint z) {
+GLvoid Model::Translate(GLint x, GLint y, GLint z) {
 
 	this->m_v3CombinedTransform += glm::vec3(x, y, z);
 

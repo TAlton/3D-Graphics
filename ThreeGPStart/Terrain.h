@@ -31,9 +31,9 @@ private:
 	GLboolean SetNormals();
 	GLboolean SetPositions();
 	GLboolean SetUV();
-	void CreateMesh();
-	void ApplyHeightmap();
-	void SmoothNormals();
+	GLvoid CreateMesh();
+	GLvoid ApplyHeightmap();
+	GLvoid SmoothNormals();
 
 	GLboolean Initialise() override final;
 

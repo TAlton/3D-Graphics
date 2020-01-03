@@ -8,6 +8,7 @@
 #include "Camera.h"
 #include "Terrain.h"
 #include "Model.h"
+#include "Skybox.h"
 
 struct Light {
 
@@ -23,7 +24,7 @@ private:
 
 	// Program object - to host shaders
 	GLuint m_program{ 0 },
-		m_skybox{ 0 };
+		m_SkyboxProgram{ 0 };
 
 	// Vertex Array Object to wrap all render settings
 	GLuint m_VAO{ 0 },
@@ -44,21 +45,29 @@ private:
 	//clears the screen to a colour
 	GLboolean ClearScreen() const;
 	//computes the viewport size for use in projection matricies
-	void ComputeViewport();
+	GLvoid ComputeViewport();
 	//Computes the projection matrix;
-	void ComputeProjectionTransform(GLfloat fov = 45.0f, GLfloat near = 1.0f, GLfloat far = 2000.0f);
+	GLvoid ComputeProjectionTransform(GLfloat fov = 45.0f, GLfloat near = 1.0f, GLfloat far = 2000.0f);
 	//calculates the view transform and the combined transform from the cameras position and where it is looking
-	void UpdateViewTransform(glm::vec3 pos, glm::vec3 look, glm::vec3 up);
-	void SetHierarchy();
+	GLvoid UpdateViewTransform(glm::vec3 pos, glm::vec3 look, glm::vec3 up);
+	GLvoid SetHierarchy();
 	GLboolean LoadModels();
 	GLboolean LoadTerrain();
+	GLboolean LoadSkybox();
 
-	void SetModelTransform(Model& m);
-	void SetTerrainTransform();
-	void BindTexture(GLuint i);
+	GLvoid SetModelTransform(Model& m);
+	GLvoid SetTerrainTransform();
+	GLvoid BindTexture(GLuint i);
+
+	GLvoid DefaultShader() const { glUseProgram(m_program); }
+	GLvoid SkyboxShader() const { glUseProgram(m_SkyboxProgram); }
+
+	GLvoid DrawSkybox(glm::vec3 pos);
 
 	std::vector<Terrain*> vecTerrain;
 	std::vector<Model*> vecModel;
+
+	Skybox* m_Skybox;
 
 public:
 
@@ -70,6 +79,6 @@ public:
 
 	// Render the scene
 	void Render(const Helpers::Camera& camera, float deltaTime);
-	void MoveBoat(glm::vec3 v);
+	GLvoid MoveBoat(glm::vec3 v);
 };
 

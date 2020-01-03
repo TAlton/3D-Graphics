@@ -5,7 +5,7 @@
 Renderer::~Renderer()
 {
 	glDeleteProgram(m_program);
-	glDeleteProgram(m_skybox);
+	glDeleteProgram(m_SkyboxProgram);
 	glDeleteBuffers(1, &m_VAO);
 }
 
@@ -14,7 +14,7 @@ bool Renderer::CreateProgram()
 {
 	// Create a new program (returns a unqiue id)
 	m_program = glCreateProgram();
-	m_skybox = glCreateProgram();
+	m_SkyboxProgram = glCreateProgram();
 
 	// Load and create vertex and fragment shaders
 	GLuint vertex_shader{ Helpers::LoadAndCompileShader(GL_VERTEX_SHADER, "Data/Shaders/vertex_shader.glsl") };
@@ -35,8 +35,8 @@ bool Renderer::CreateProgram()
 	//glBindAttribLocation(m_program, 0, "vertex_position");
 
 
-	glAttachShader(m_skybox, skybox_vertex_shader);
-	glAttachShader(m_skybox, skybox_fragment_shader);
+	glAttachShader(m_SkyboxProgram, skybox_vertex_shader);
+	glAttachShader(m_SkyboxProgram, skybox_fragment_shader);
 
 	// Done with the originals of these as we have made copies
 	glDeleteShader(vertex_shader);
@@ -45,7 +45,7 @@ bool Renderer::CreateProgram()
 	glDeleteShader(skybox_fragment_shader);
 
 	// Link the shaders, checking for errors
-	if (!Helpers::LinkProgramShaders(m_program) || !Helpers::LinkProgramShaders(m_skybox))
+	if (!Helpers::LinkProgramShaders(m_program) || !Helpers::LinkProgramShaders(m_SkyboxProgram))
 		return false;
 
 	//calculates view and projection matricies
@@ -54,6 +54,7 @@ bool Renderer::CreateProgram()
 	//loads all renderables
 	LoadModels();
 	LoadTerrain();
+	LoadSkybox();
 
 	return !Helpers::CheckForGLError();
 }
@@ -68,7 +69,7 @@ GLboolean Renderer::ClearScreen() const {
 	
 }
 
-void Renderer::ComputeViewport() {
+GLvoid Renderer::ComputeViewport() {
 
 	GLint viewportSize[4];
 	glGetIntegerv(GL_VIEWPORT, viewportSize);
@@ -76,7 +77,7 @@ void Renderer::ComputeViewport() {
 	
 }
 
-void Renderer::ComputeProjectionTransform(GLfloat fov, GLfloat near, GLfloat far) {
+GLvoid Renderer::ComputeProjectionTransform(GLfloat fov, GLfloat near, GLfloat far) {
 
 	
 	m_m4ProjectionTransform = (glm::mat4(
@@ -88,7 +89,7 @@ void Renderer::ComputeProjectionTransform(GLfloat fov, GLfloat near, GLfloat far
 
 }
 
-void Renderer::UpdateViewTransform(glm::vec3 pos, glm::vec3 look, glm::vec3 up) {
+GLvoid Renderer::UpdateViewTransform(glm::vec3 pos, glm::vec3 look, glm::vec3 up) {
 
 	//calculates the view xform from the cameras properties
 	m_m4ViewTransform = glm::lookAt(pos, pos + look, up);
@@ -97,7 +98,7 @@ void Renderer::UpdateViewTransform(glm::vec3 pos, glm::vec3 look, glm::vec3 up) 
 
 }
 
-void Renderer::SetHierarchy() { //possible not needed
+GLvoid Renderer::SetHierarchy() { //possible not needed
 
 	for (auto& x : vecModel) {
 
@@ -120,7 +121,7 @@ GLboolean Renderer::LoadModels() {
 	Model* m_mJeep = new Model("Data\\Models\\Jeep\\jeep.obj", m_VAO, "Data\\Models\\Jeep\\jeep_army.jpg", m_unTexID);
 	Model* m_mSun = new Model("Data\\Models\\earth.obj", m_VAO, -1, glm::vec3(0, 100, 0));
 
-	vecModel.insert(vecModel.end(), { m_mHull, m_mWingRight, m_mWingLeft, m_mPropeller, m_mGunBase, m_mGun, m_mJeep, m_mSun });
+	vecModel.insert(vecModel.end(), { m_mHull, m_mWingRight, m_mWingLeft, m_mPropeller, m_mGunBase, m_mGun, m_mJeep, /*m_mSun*/ });
 
 	return Helpers::CheckForGLError();
 
@@ -136,7 +137,15 @@ GLboolean Renderer::LoadTerrain() {
 
 }
 
-void Renderer::SetModelTransform(Model& m) { //need to clean this up
+GLboolean Renderer::LoadSkybox() {
+	
+	m_Skybox = new Skybox(m_VAO, m_unTexID);
+
+	return Helpers::CheckForGLError();
+
+}
+
+GLvoid Renderer::SetModelTransform(Model& m) { //need to clean this up
 
 	glm::mat4 model_xform = glm::mat4(1);
 
@@ -157,7 +166,7 @@ void Renderer::SetModelTransform(Model& m) { //need to clean this up
 
 }
 
-void Renderer::SetTerrainTransform() {
+GLvoid Renderer::SetTerrainTransform() {
 
 	glm::mat4 model_xform = glm::mat4(1);
 
@@ -167,13 +176,36 @@ void Renderer::SetTerrainTransform() {
 
 }
 
-void Renderer::BindTexture(GLuint i) {
+GLvoid Renderer::BindTexture(GLuint i) {
 
 	if (-1 == i) return;
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, i);
 	glUniform1i(glGetUniformLocation(m_program, "sampler_tex"), 0);
+
+}
+
+GLvoid Renderer::DrawSkybox(glm::vec3 pos) {
+
+	glDepthFunc(GL_LEQUAL);
+
+	glUseProgram(m_SkyboxProgram);
+
+	GLuint proj = glGetUniformLocation(m_SkyboxProgram, "projection"); //need a way to put this in a function
+	glUniformMatrix4fv(proj, 1, GL_FALSE, glm::value_ptr(m_m4ProjectionTransform));
+	GLuint view = glGetUniformLocation(m_SkyboxProgram, "view");
+	glUniformMatrix4fv(view, 1, GL_FALSE, glm::value_ptr(m_m4ViewTransform));
+	glm::mat4 temp = glm::mat4(1);
+	temp = glm::translate(temp, pos);
+	GLuint model = glGetUniformLocation(m_SkyboxProgram, "model");
+	glUniformMatrix4fv(model, 1, GL_FALSE, glm::value_ptr(temp));
+
+	glBindVertexArray(m_Skybox->GetVAO());
+	glBindTexture(GL_TEXTURE_CUBE_MAP, m_Skybox->GetTextureID());
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+
+	glDepthFunc(GL_LESS);
 
 }
 
@@ -206,11 +238,22 @@ void Renderer::Render(const Helpers::Camera& camera, float deltaTime)
 	ClearScreen();
 	UpdateViewTransform(camera.GetPosition(), camera.GetLookVector(), camera.GetUpVector());
 
+	DrawSkybox(camera.GetPosition());
+
 	//Use our program. Doing this enables the shaders we attached
 	glUseProgram(m_program);
 
 	GLuint combined_xform_id = glGetUniformLocation(m_program, "combined_xform"); //need a way to put this in a function
 	glUniformMatrix4fv(combined_xform_id, 1, GL_FALSE, glm::value_ptr(m_m4CombinedTransform));
+
+	glUniform3f(glGetUniformLocation(m_program, "dLight.direction"), 0.5f, 0.0f, 0.0f);
+
+	glUniform3f(glGetUniformLocation(m_program, "pLight.position"), 100, 100, -100);
+	glUniform3f(glGetUniformLocation(m_program, "pLight.light_colour"), 10, 5, 0);
+	glUniform1f(glGetUniformLocation(m_program, "pLight.light_range"), 100.0f);
+
+
+
 
 	for (auto& x : vecTerrain) { //draws all terrain
 		//move draw into a function
@@ -230,11 +273,13 @@ void Renderer::Render(const Helpers::Camera& camera, float deltaTime)
 
 	}
 
+
 	// Always a good idea, when debugging at least, to check for GL errors
 	Helpers::CheckForGLError();
+
 }
 
-void Renderer::MoveBoat(glm::vec3 v) {
+GLvoid Renderer::MoveBoat(glm::vec3 v) {
 
 	for (auto& x : vecModel) {
 
@@ -247,11 +292,6 @@ void Renderer::MoveBoat(glm::vec3 v) {
 /*
 
 todo
-
-skybox
----create and draw square
----make square follow camera
-------draw texture on inside of the cube
 
 multiple lights
 ---create light struct
