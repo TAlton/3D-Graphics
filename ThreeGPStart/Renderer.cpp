@@ -254,7 +254,7 @@ void Renderer::Render(const Helpers::Camera& camera, float deltaTime)
 
 	//glUniform3f(glGetUniformLocation(m_program, "sLight.position"), vecModel[0]->GetTransform().x, vecModel[0]->GetTransform().y, vecModel[0]->GetTransform().z + 5);
 	glUniform3f(glGetUniformLocation(m_program, "sLight.position"), camera.GetPosition().x, camera.GetPosition().y, camera.GetPosition().z);
-	glUniform1f(glGetUniformLocation(m_program, "sLight.angle"), glm::cos(glm::radians(45.0f)));
+	glUniform1f(glGetUniformLocation(m_program, "sLight.angle"), 10.0f);
 	glUniform3f(glGetUniformLocation(m_program, "sLight.direction"), camera.GetLookVector().x, camera.GetLookVector().y, camera.GetLookVector().z);
 
 	glUniform3f(glGetUniformLocation(m_program, "ambient_light"), 0.2, 0.025, 0.015);

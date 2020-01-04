@@ -59,17 +59,31 @@ vec3 CalcPointLight() {
 
 vec3 CalcSpotLight() {
 
-	vec3 lightDir = normalize(sLight.position - v_position);
-	float theta = dot(lightDir, -normalize(sLight.cone_direction));
-	float attenuation = 1.0  - smoothstep(0, 100, length(sLight.position - v_position));
+//	vec3 lightDir = normalize(sLight.position - v_position);
+//	float theta = dot(lightDir, -normalize(sLight.cone_direction));
+//	float attenuation = 1.0  - smoothstep(0, 100, length(sLight.position - v_position));
+//
+//	float fc = smoothstep(cos(0.5 * sLight.angle), 1, dot(-lightDir, sLight.cone_direction));
+//
+//	if(theta < sLight.angle) {
+//
+//	 return vec3(0,0,10) * attenuation;
+//
+//	}
 
-	float fc = smoothstep(cos(0.5 * sLight.angle), 1, dot(-lightDir, sLight.cone_direction));
+	vec3 lightDirection = -sLight.position.xyz;
+	vec3 surfaceToLight = normalize(sLight.position.xyz - v_position);
+	float distanceToLight = length(sLight.position.xyz - v_position);
+	vec3 coneDir = normalize(sLight.cone_direction);
+	float atten = 1.0 - smoothstep(0, 100, length(sLight.position - v_position));
 
-	if(theta < sLight.angle) {
+	float lightToSurfaceAngle = degrees(acos(dot(-surfaceToLight, normalize(sLight.cone_direction))));
 
-	 return vec3(0,0,10) * attenuation;
-
+	if(lightToSurfaceAngle < sLight.angle) {
+		atten = 0.0;
 	}
+
+	return vec3(0, 0, 10) * atten;
 
 }
 
