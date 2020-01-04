@@ -246,7 +246,7 @@ void Renderer::Render(const Helpers::Camera& camera, float deltaTime)
 	GLuint combined_xform_id = glGetUniformLocation(m_program, "combined_xform"); //need a way to put this in a function
 	glUniformMatrix4fv(combined_xform_id, 1, GL_FALSE, glm::value_ptr(m_m4CombinedTransform));
 
-	glUniform3f(glGetUniformLocation(m_program, "dLight.direction"), 0.5f, 0.0f, 0.0f);
+	glUniform3f(glGetUniformLocation(m_program, "dLight.direction"), -0.9, -0.1, 0.0f);
 
 	glUniform3f(glGetUniformLocation(m_program, "pLight.position"), 100, 100, -100);
 	glUniform3f(glGetUniformLocation(m_program, "pLight.light_colour"), 10, 5, 0);
@@ -257,6 +257,9 @@ void Renderer::Render(const Helpers::Camera& camera, float deltaTime)
 	glUniform1f(glGetUniformLocation(m_program, "sLight.angle"), glm::cos(glm::radians(45.0f)));
 	glUniform3f(glGetUniformLocation(m_program, "sLight.direction"), camera.GetLookVector().x, camera.GetLookVector().y, camera.GetLookVector().z);
 
+	glUniform3f(glGetUniformLocation(m_program, "ambient_light"), 0.2, 0.025, 0.015);
+
+	glm::vec3 temp = camera.GetLookVector();
 
 	for (auto& x : vecTerrain) { //draws all terrain
 		//move draw into a function

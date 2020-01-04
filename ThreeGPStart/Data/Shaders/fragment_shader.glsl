@@ -30,6 +30,7 @@ struct SpotLight {
 
 };
 
+uniform vec3 ambient_light;
 uniform SpotLight sLight;
 uniform PointLight pLight;
 uniform DirectionalLight dLight;
@@ -59,11 +60,14 @@ vec3 CalcPointLight() {
 vec3 CalcSpotLight() {
 
 	vec3 lightDir = normalize(sLight.position - v_position);
-	float theta = dot(lightDir, normalize(-sLight.cone_direction));
+	float theta = dot(lightDir, -normalize(sLight.cone_direction));
+	float attenuation = 1.0  - smoothstep(0, 100, length(sLight.position - v_position));
 
-	if(theta > sLight.angle) {
+	float fc = smoothstep(cos(0.5 * sLight.angle), 1, dot(-lightDir, sLight.cone_direction));
 
-	 return vec3(0,0,10);
+	if(theta < sLight.angle) {
+
+	 return vec3(0,0,10) * attenuation;
 
 	}
 
@@ -114,12 +118,8 @@ void main(void)
 	vec3 tex_colour = texture(sampler_tex, TexCoord).rgb;
 	vec3 N = normalize(v_normal);
 
-	vec3 final_colour = tex_colour * (CalcDirectionalLight(N) + CalcPointLight() + CalcSpotLight());
+	vec3 final_colour = (ambient_light + tex_colour) * (CalcDirectionalLight(N) + CalcPointLight() + CalcSpotLight());
 
 	fragment_colour = vec4(final_colour, 1.0);
 
 }
-
-// attenuated light uses attenuation to multiply diffuse intensity to give a range for the light
-
-
