@@ -28,8 +28,8 @@ private:
 		"Data\\Sky\\Sky\\left.jpg",
 		"Data\\Sky\\Sky\\top.jpg",
 		"Data\\Sky\\Sky\\bottom.jpg",
-		"Data\\Sky\\Sky\\back.jpg",
-		"Data\\Sky\\Sky\\front.jpg"
+		"Data\\Sky\\Sky\\front.jpg",
+		"Data\\Sky\\Sky\\back.jpg"
 
 	};
 

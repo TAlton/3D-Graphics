@@ -80,9 +80,9 @@ vec3 CalcSpotLight() {
 
 	float lightToSurfaceAngle = degrees(acos(dot(-surfaceToLight, normalize(sLight.cone_direction))));
 
-	float horizontal_atten = 1.0 - smoothstep(sLight.inner_angle, sLight.angle, lightToSurfaceAngle); //attenuation between the center of the light and the outer edge
+	float horizontal_atten = 1.0 - smoothstep(sLight.inner_angle, sLight.outer_angle, lightToSurfaceAngle); //attenuation between the center of the light and the outer edge
 
-	if(lightToSurfaceAngle < sLight.angle) {
+	if(lightToSurfaceAngle > sLight.outer_angle) {
 		atten = 0.0;
 	}
 
