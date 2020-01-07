@@ -17,10 +17,10 @@ bool Renderer::CreateProgram()
 	m_SkyboxProgram = glCreateProgram();
 
 	// Load and create vertex and fragment shaders
-	GLuint vertex_shader{ Helpers::LoadAndCompileShader(GL_VERTEX_SHADER, "Data/Shaders/vertex_shader.glsl") };
-	GLuint fragment_shader{ Helpers::LoadAndCompileShader(GL_FRAGMENT_SHADER, "Data/Shaders/fragment_shader.glsl") };
-	GLuint skybox_vertex_shader{ Helpers::LoadAndCompileShader(GL_VERTEX_SHADER, "Data/Shaders/SkyboxVS.glsl") };
-	GLuint skybox_fragment_shader{ Helpers::LoadAndCompileShader(GL_FRAGMENT_SHADER, "Data/Shaders/SkyboxFS.glsl") };
+	GLuint vertex_shader{ Helpers::LoadAndCompileShader(GL_VERTEX_SHADER, "Data\\Shaders\\vertex_shader.glsl") };
+	GLuint fragment_shader{ Helpers::LoadAndCompileShader(GL_FRAGMENT_SHADER, "Data\\Shaders\\fragment_shader.glsl") };
+	GLuint skybox_vertex_shader{ Helpers::LoadAndCompileShader(GL_VERTEX_SHADER, "Data\\Shaders\\SkyboxVS.glsl") };
+	GLuint skybox_fragment_shader{ Helpers::LoadAndCompileShader(GL_FRAGMENT_SHADER, "Data\\Shaders\\SkyboxFS.glsl") };
 
 	if (vertex_shader == 0 || fragment_shader == 0 || 0 == skybox_vertex_shader || 0 == skybox_fragment_shader)
 		return false;
