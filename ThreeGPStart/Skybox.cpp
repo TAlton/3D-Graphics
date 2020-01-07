@@ -67,7 +67,7 @@ GLboolean Skybox::CreateSkybox() {
 
         Helpers::ImageLoader ilSkybox;
         ilSkybox.Load(m_vecstrTextures[i]);
-        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, ilSkybox.Width(), ilSkybox.Height(), 0, GL_RGB, GL_UNSIGNED_BYTE, ilSkybox.GetData());
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, ilSkybox.Width(), ilSkybox.Height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, ilSkybox.GetData());
 
     }
 

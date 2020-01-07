@@ -24,19 +24,12 @@ private:
 
 	std::vector<std::string> m_vecstrTextures{
 
-		//"Data\\Sky\\Sky\\right.jpg",
-		//"Data\\Sky\\Sky\\left.jpg",
-		//"Data\\Sky\\Sky\\top.jpg",
-		//"Data\\Sky\\Sky\\bottom.jpg",
-		//"Data\\Sky\\Sky\\back.jpg",
-		//"Data\\Sky\\Sky\\front.jpg"
-
-		"Data\\Models\\Jeep\\jeep_army.jpg",
-		"Data\\Models\\Jeep\\jeep_army.jpg",
-		"Data\\Models\\Jeep\\jeep_army.jpg",
-		"Data\\Models\\Jeep\\jeep_army.jpg",
-		"Data\\Models\\Jeep\\jeep_army.jpg",
-		"Data\\Models\\Jeep\\jeep_army.jpg"
+		"Data\\Sky\\Sky\\right.jpg",
+		"Data\\Sky\\Sky\\left.jpg",
+		"Data\\Sky\\Sky\\top.jpg",
+		"Data\\Sky\\Sky\\bottom.jpg",
+		"Data\\Sky\\Sky\\back.jpg",
+		"Data\\Sky\\Sky\\front.jpg"
 
 	};
 
