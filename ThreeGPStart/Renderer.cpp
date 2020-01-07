@@ -246,7 +246,7 @@ void Renderer::Render(const Helpers::Camera& camera, float deltaTime)
 	GLuint combined_xform_id = glGetUniformLocation(m_program, "combined_xform"); //need a way to put this in a function
 	glUniformMatrix4fv(combined_xform_id, 1, GL_FALSE, glm::value_ptr(m_m4CombinedTransform));
 
-	glUniform3f(glGetUniformLocation(m_program, "dLight.direction"), -0.9, -0.1, 0.0f);
+	glUniform3f(glGetUniformLocation(m_program, "dLight.direction"), -0.9f, -0.1f, 0.0f);
 
 	glUniform3f(glGetUniformLocation(m_program, "pLight.position"), 100, 100, -100);
 	glUniform3f(glGetUniformLocation(m_program, "pLight.light_colour"), 10, 5, 0);
