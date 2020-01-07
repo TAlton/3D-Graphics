@@ -119,7 +119,7 @@ GLboolean Renderer::LoadModels() {
 	Model* m_mGunBase = new Model("Data\\Models\\AquaPig\\gun_base.obj", m_VAO,  0, glm::vec3(0.0f, 0.569f, -1.866f));
 	Model* m_mGun = new Model("Data\\Models\\AquaPig\\gun.obj", m_VAO, 4,  glm::vec3(0.0f, 1.506f, 0.644f));
 	Model* m_mJeep = new Model("Data\\Models\\Jeep\\jeep.obj", m_VAO, "Data\\Models\\Jeep\\jeep_army.jpg", m_unTexID);
-	Model* m_mSun = new Model("Data\\Models\\earth.obj", m_VAO, -1, glm::vec3(0, 100, 0));
+	//Model* m_mSun = new Model("Data\\Models\\earth.obj", m_VAO, -1, glm::vec3(0, 100, 0));
 
 	vecModel.insert(vecModel.end(), { m_mHull, m_mWingRight, m_mWingLeft, m_mPropeller, m_mGunBase, m_mGun, m_mJeep, /*m_mSun*/ });
 
@@ -238,8 +238,6 @@ void Renderer::Render(const Helpers::Camera& camera, float deltaTime)
 	ClearScreen();
 	UpdateViewTransform(camera.GetPosition(), camera.GetLookVector(), camera.GetUpVector());
 
-	DrawSkybox(camera.GetPosition());
-
 	//Use our program. Doing this enables the shaders we attached
 	glUseProgram(m_program);
 
@@ -249,7 +247,7 @@ void Renderer::Render(const Helpers::Camera& camera, float deltaTime)
 	glUniform3f(glGetUniformLocation(m_program, "dLight.direction"), -0.9f, -0.1f, 0.0f);
 
 	glUniform3f(glGetUniformLocation(m_program, "pLight.position"), 100, 100, -100);
-	glUniform3f(glGetUniformLocation(m_program, "pLight.light_colour"), 10, 5, 0);
+	glUniform3f(glGetUniformLocation(m_program, "pLight.light_colour"), 10.0f, 5.0f, 0.0f);
 	glUniform1f(glGetUniformLocation(m_program, "pLight.light_range"), 100.0f);
 
 	//glUniform3f(glGetUniformLocation(m_program, "sLight.position"), vecModel[0]->GetTransform().x, vecModel[0]->GetTransform().y, vecModel[0]->GetTransform().z + 5);
@@ -259,7 +257,7 @@ void Renderer::Render(const Helpers::Camera& camera, float deltaTime)
 
 	glUniform3f(glGetUniformLocation(m_program, "sLight.cone_direction"), camera.GetLookVector().x, camera.GetLookVector().y, camera.GetLookVector().z);
 
-	glUniform3f(glGetUniformLocation(m_program, "ambient_light"), 0.2, 0.025, 0.015);
+	glUniform3f(glGetUniformLocation(m_program, "ambient_light"), 0.2f, 0.025f, 0.015f);
 
 	glm::vec3 temp = camera.GetLookVector();
 
@@ -281,6 +279,7 @@ void Renderer::Render(const Helpers::Camera& camera, float deltaTime)
 
 	}
 
+	DrawSkybox(camera.GetPosition());
 
 	// Always a good idea, when debugging at least, to check for GL errors
 	Helpers::CheckForGLError();

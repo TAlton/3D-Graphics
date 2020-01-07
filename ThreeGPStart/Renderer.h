@@ -39,7 +39,7 @@ private:
 		m_m4ViewTransform{ 0 },
 		m_m4CombinedTransform{ 0 };
 
-	GLfloat deg;
+	GLfloat deg{ 0.0f };
 
 	bool CreateProgram();
 	//clears the screen to a colour
