@@ -25,7 +25,8 @@ struct PointLight {
 struct SpotLight {
 
 	vec3 position;
-	float angle;
+	float inner_angle;
+	float outer_angle;
 	vec3 cone_direction;
 
 };
@@ -79,11 +80,13 @@ vec3 CalcSpotLight() {
 
 	float lightToSurfaceAngle = degrees(acos(dot(-surfaceToLight, normalize(sLight.cone_direction))));
 
+	float horizontal_atten = 1.0 - smoothstep(sLight.inner_angle, sLight.angle, lightToSurfaceAngle); //attenuation between the center of the light and the outer edge
+
 	if(lightToSurfaceAngle < sLight.angle) {
 		atten = 0.0;
 	}
 
-	return vec3(0, 0, 10) * atten;
+	return vec3(0, 0, 10) * atten * horizontal_atten;
 
 }
 
